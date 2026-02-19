@@ -1,7 +1,7 @@
 export interface Project {
   id: string;
   name: string;
-  status: "in-progress" | "waiting" | "someday" | "official";
+  status: "in-progress" | "released" | "waiting" | "someday" | "official";
   statusLabel: string;
   official: boolean;
   color: string;
@@ -26,6 +26,28 @@ export const projects: Project[] = [
     image: "https://cdn2.steamgriddb.com/hero/f87ab3858eb99f1af77cfc900cd91199.jpg",
     downloadUrl: "https://lbklauncher.com/games/persona_5_royal/solovina-komanda",
     downloadLabel: "Завантажити",
+  },
+  {
+    id: "kingdom-hearts-2",
+    name: "KINGDOM HEARTS II",
+    status: "released",
+    statusLabel: "Вийшов",
+    official: false,
+    color: "#f59e0b",
+    gradient: "linear-gradient(135deg, #1a1a2e 0%, #1e293b 40%, #f59e0b 100%)",
+    image: "https://images6.alphacoders.com/582/thumb-1920-582236.jpg",
+    downloadUrl: "https://lbklauncher.com/games/kingdom_hearts_ii/solovina-komanda",
+    downloadLabel: "Завантажити",
+  },
+  {
+    id: "kingdom-hearts-3",
+    name: "KINGDOM HEARTS III + Re Mind (DLC)",
+    status: "in-progress",
+    statusLabel: "У процесі",
+    official: false,
+    color: "#3b82f6",
+    gradient: "linear-gradient(135deg, #0a1628 0%, #1a2d4e 40%, #3b82f6 100%)",
+    image: "https://cdn2.steamgriddb.com/hero/4a85893ded100b9f592f36a9e9473a7c.png",
   },
   {
     id: "dave-the-diver",

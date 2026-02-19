@@ -49,7 +49,7 @@ export default function Navbar() {
       <motion.nav
         initial={{ y: -60, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ delay: 1.8, duration: 0.5, ease: "easeOut" }}
+        transition={{ delay: 0.4, duration: 0.35, ease: "easeOut" }}
         style={{
           position: "fixed",
           top: 0,
