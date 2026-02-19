@@ -532,7 +532,7 @@ export default function ProjectsSection() {
 
         {/* === Project List === */}
         <div style={{
-          maxWidth: "960px",
+          maxWidth: "1100px",
           margin: isMobile ? "36px auto 0" : "56px auto 0",
           padding: "0 16px",
         }}>
@@ -620,162 +620,120 @@ export default function ProjectsSection() {
           </div>
 
           {/* 3-column compact list */}
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={statusFilter}
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8 }}
-              transition={{ duration: 0.2 }}
+            <div
               style={{
                 display: "grid",
-                gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 1fr)",
-                gap: isMobile ? "0px" : "12px",
-                alignItems: "start",
+                gridTemplateColumns: isMobile ? "repeat(2, 1fr)" : "repeat(5, 1fr)",
+                gap: isMobile ? "4px" : "8px",
               }}
             >
-              {(() => {
-                const columnCount = isMobile ? 1 : 3;
-                const columns: { proj: typeof projects[0]; idx: number }[][] = Array.from(
-                  { length: columnCount },
-                  () => []
-                );
-                filteredProjects.forEach((item, i) => {
-                  columns[i % columnCount].push(item);
-                });
-                return columns.map((column, colIdx) => (
-                  <div key={colIdx} style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
-                    {column.map(({ proj, idx }, itemIdx) => {
-                      const badgeColor = statusBadgeColor(proj);
-                      const badgeLabel = proj.official
-                        ? "Офіційний"
-                        : (proj.badgeLabel || proj.statusLabel);
-                      const isSelected = idx === current;
-                      return (
-                        <motion.button
-                          key={proj.id}
-                          initial={{ opacity: 0, x: -10 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          transition={{
-                            duration: 0.2,
-                            delay: itemIdx * 0.03,
-                          }}
-                          onClick={() => goTo(idx)}
-                          onMouseEnter={(e) => {
-                            if (!isSelected) {
-                              e.currentTarget.style.background = "rgba(255,255,255,0.04)";
-                              e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)";
-                            }
-                          }}
-                          onMouseLeave={(e) => {
-                            if (!isSelected) {
-                              e.currentTarget.style.background = "transparent";
-                              e.currentTarget.style.borderColor = "transparent";
-                            }
-                          }}
+              {filteredProjects.map(({ proj, idx }) => {
+                const badgeColor = statusBadgeColor(proj);
+                const badgeLabel = proj.official
+                  ? "Офіційний"
+                  : (proj.badgeLabel || proj.statusLabel);
+                const isSelected = idx === current;
+                return (
+                  <button
+                    key={proj.id}
+                    onClick={() => goTo(idx)}
+                    onMouseEnter={(e) => {
+                      if (!isSelected) {
+                        e.currentTarget.style.background = "rgba(255,255,255,0.07)";
+                        e.currentTarget.style.borderColor = "rgba(255,255,255,0.12)";
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (!isSelected) {
+                        e.currentTarget.style.background = "rgba(255,255,255,0.035)";
+                        e.currentTarget.style.borderColor = "rgba(255,255,255,0.06)";
+                      }
+                    }}
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      gap: "8px",
+                      padding: "14px 10px",
+                      borderRadius: "10px",
+                      borderTop: `3px solid ${isSelected ? badgeColor : badgeColor + "44"}`,
+                      border: isSelected
+                        ? `1px solid ${badgeColor}44`
+                        : "1px solid rgba(255,255,255,0.06)",
+                      borderTopWidth: "3px",
+                      borderTopColor: isSelected ? badgeColor : `${badgeColor}44`,
+                      background: isSelected
+                        ? `${badgeColor}0d`
+                        : "rgba(255,255,255,0.035)",
+                      cursor: "pointer",
+                      transition: "all 0.15s ease",
+                      textAlign: "center",
+                      width: "100%",
+                    }}
+                  >
+                    {/* Name */}
+                    <span style={{
+                      fontSize: "0.78rem",
+                      fontWeight: 600,
+                      color: isSelected ? "#f0f0f0" : "rgba(255,255,255,0.7)",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      whiteSpace: "nowrap",
+                      width: "100%",
+                      lineHeight: 1.3,
+                    }}>
+                      {proj.name}
+                    </span>
+
+                    {/* Status badge + download */}
+                    <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
+                      <span style={{
+                        padding: "2px 8px",
+                        borderRadius: "4px",
+                        fontSize: "0.6rem",
+                        fontWeight: 700,
+                        background: badgeColor,
+                        color: "#fff",
+                        whiteSpace: "nowrap",
+                      }}>
+                        {badgeLabel}
+                      </span>
+
+                      {proj.downloadUrl && !proj.downloadDisabled && (
+                        <a
+                          href={proj.downloadUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={(e) => e.stopPropagation()}
                           style={{
                             display: "flex",
                             alignItems: "center",
-                            gap: "10px",
-                            padding: "10px 12px",
-                            borderRadius: "8px",
-                            border: isSelected
-                              ? `1px solid ${badgeColor}44`
-                              : "1px solid transparent",
-                            background: isSelected
-                              ? `${badgeColor}0d`
-                              : "transparent",
-                            cursor: "pointer",
-                            transition: "all 0.15s ease",
-                            width: "100%",
-                            textAlign: "left",
-                          }}
-                        >
-                          {/* Status dot */}
-                          <span style={{
-                            width: "8px",
-                            height: "8px",
-                            borderRadius: "50%",
-                            background: badgeColor,
-                            flexShrink: 0,
-                            boxShadow: isSelected
-                              ? `0 0 6px ${badgeColor}66`
-                              : "none",
-                          }} />
-
-                          {/* Project name */}
-                          <span style={{
-                            flex: 1,
-                            fontSize: "0.82rem",
-                            fontWeight: 600,
-                            color: isSelected ? "#f0f0f0" : "rgba(255,255,255,0.6)",
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
-                            whiteSpace: "nowrap",
-                            lineHeight: 1.3,
-                            minWidth: 0,
-                          }}>
-                            {proj.name}
-                          </span>
-
-                          {/* Status badge pill */}
-                          <span style={{
-                            padding: "2px 6px",
+                            justifyContent: "center",
+                            width: "22px",
+                            height: "22px",
                             borderRadius: "4px",
-                            fontSize: "0.55rem",
-                            fontWeight: 700,
-                            background: `${badgeColor}22`,
-                            color: badgeColor,
-                            whiteSpace: "nowrap",
+                            background: "rgba(139,195,74,0.15)",
+                            color: "#8bc34a",
                             flexShrink: 0,
-                            letterSpacing: "0.02em",
-                          }}>
-                            {badgeLabel}
-                          </span>
-
-                          {/* Download icon */}
-                          {proj.downloadUrl && !proj.downloadDisabled && (
-                            <a
-                              href={proj.downloadUrl}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              onClick={(e) => e.stopPropagation()}
-                              style={{
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                width: "24px",
-                                height: "24px",
-                                borderRadius: "4px",
-                                background: "rgba(139,195,74,0.12)",
-                                color: "#8bc34a",
-                                flexShrink: 0,
-                                transition: "background 0.2s",
-                              }}
-                              onMouseEnter={(e) => {
-                                e.currentTarget.style.background = "rgba(139,195,74,0.28)";
-                              }}
-                              onMouseLeave={(e) => {
-                                e.currentTarget.style.background = "rgba(139,195,74,0.12)";
-                              }}
-                            >
-                              <svg width="12" height="12" viewBox="0 0 24 24" fill="none"
-                                stroke="currentColor" strokeWidth="2.5"
-                                strokeLinecap="round" strokeLinejoin="round">
-                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                                <polyline points="7 10 12 15 17 10" />
-                                <line x1="12" y1="15" x2="12" y2="3" />
-                              </svg>
-                            </a>
-                          )}
-                        </motion.button>
-                      );
-                    })}
-                  </div>
-                ));
-              })()}
-            </motion.div>
-          </AnimatePresence>
+                            transition: "background 0.2s",
+                          }}
+                          onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(139,195,74,0.3)"; }}
+                          onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(139,195,74,0.15)"; }}
+                        >
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" strokeWidth="2.5"
+                            strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                            <polyline points="7 10 12 15 17 10" />
+                            <line x1="12" y1="15" x2="12" y2="3" />
+                          </svg>
+                        </a>
+                      )}
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
           {filteredProjects.length === 0 && (
             <p style={{ textAlign: "center", color: "rgba(255,255,255,0.3)", fontSize: "0.85rem", padding: "16px 0" }}>
               Нічого не знайдено
