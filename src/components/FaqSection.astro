@@ -1,0 +1,107 @@
+---
+const faqs = [
+  {
+    question: "Переклади працюють лише на ліцензії?",
+    answer: "Так, ми підтримуємо лише актуальні, офіційні версії для Steam.",
+  },
+  {
+    question: "Переклади безкоштовні?",
+    answer: "Так, донат є добровільним.",
+  },
+  {
+    question: "Як завантажити переклади?",
+    answer: "Скористайтеся кнопкою «Завантажити» та встановіть LBK Launcher.",
+  },
+  {
+    question: "Переклади працюють на Steam Deck?",
+    answer: "Так, існує окрема версія LBK Launcher для Steam Deck.",
+  },
+  {
+    question: "Коли вийде повний переклад?",
+    answer: "Коли доробимо.",
+  },
+];
+---
+
+<section id="faq" class="section-reveal" style="max-width: 760px; margin: 0 auto; padding: 80px 16px;">
+  <h2 style="text-align: center; font-size: clamp(1.8rem, 4vw, 2.5rem); font-weight: 800; color: #f0f0f0; margin-bottom: 8px;">
+    Часті запитання
+  </h2>
+  <p style="text-align: center; color: #a0a0a8; margin-bottom: 40px; font-size: 1rem;">
+    Відповіді на найпоширеніші питання
+  </p>
+
+  <div class="faq-list">
+    {faqs.map((faq, i) => (
+      <details class="faq-item">
+        <summary class="faq-question">
+          <span>{faq.question}</span>
+          <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6 9 12 15 18 9" />
+          </svg>
+        </summary>
+        <div class="faq-answer">
+          <p>{faq.answer}</p>
+        </div>
+      </details>
+    ))}
+  </div>
+</section>
+
+<style>
+  .faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .faq-item {
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(30, 30, 35, 0.6);
+    overflow: hidden;
+    transition: border-color 0.25s ease;
+  }
+  .faq-item:hover {
+    border-color: rgba(255, 255, 255, 0.15);
+  }
+  .faq-item[open] {
+    border-color: rgba(255, 255, 255, 0.12);
+  }
+  .faq-question {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 16px 20px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #f0f0f0;
+    list-style: none;
+    user-select: none;
+  }
+  .faq-question::-webkit-details-marker {
+    display: none;
+  }
+  .faq-question::marker {
+    display: none;
+    content: "";
+  }
+  .faq-chevron {
+    flex-shrink: 0;
+    color: #a0a0a8;
+    transition: transform 0.25s ease;
+  }
+  .faq-item[open] .faq-chevron {
+    transform: rotate(180deg);
+  }
+  .faq-answer {
+    padding: 0 20px 16px;
+  }
+  .faq-answer p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #a0a0a8;
+    line-height: 1.6;
+  }
+</style>
