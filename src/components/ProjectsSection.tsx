@@ -1,6 +1,15 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { projects } from "../data/projects";
+import { projects, type Project } from "../data/projects";
+
+const statusBadgeColor = (proj: Project): string => {
+  if (proj.status === "official") return "#eab308";
+  if (proj.status === "released") return "#22c55e";
+  if (proj.status === "in-progress") return "#ef4444";
+  if (proj.status === "waiting") return "#a855f7";
+  if (proj.status === "someday") return "#6b7280";
+  return proj.color;
+};
 
 const slideVariants = {
   enter: (dir: number) => ({
@@ -23,7 +32,16 @@ export default function ProjectsSection() {
   const [isMobile, setIsMobile] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
   const [visible, setVisible] = useState(false);
+  const [search, setSearch] = useState("");
   const total = projects.length;
+
+  const filteredProjects = useMemo(() => {
+    const q = search.toLowerCase().trim();
+    if (!q) return projects.map((proj, idx) => ({ proj, idx }));
+    return projects
+      .map((proj, idx) => ({ proj, idx }))
+      .filter(({ proj }) => proj.name.toLowerCase().includes(q));
+  }, [search]);
 
   const goPrev = useCallback(() => {
     setDirection(-1);
@@ -212,12 +230,13 @@ export default function ProjectsSection() {
           <div style={{
             fontSize: "0.65rem",
             fontWeight: 600,
-            color: proj.official ? "#22c55e" : proj.color,
+            color: "#fff",
+            textShadow: "0 1px 4px rgba(0,0,0,0.6)",
             marginBottom: "4px",
             textTransform: "uppercase",
             letterSpacing: "0.08em",
           }}>
-            {proj.official ? "Офіційний переклад" : proj.statusLabel}
+            {proj.official ? "Офіційний переклад" : (proj.status === "released" ? "Українська текстова локалізація" : proj.statusLabel)}
           </div>
           {/* Title */}
           <h3 style={{
@@ -498,101 +517,143 @@ export default function ProjectsSection() {
           }}>
             Усі проєкти
           </h3>
+
+          {/* Search */}
+          <div style={{ position: "relative", marginBottom: "12px" }}>
+            <svg
+              width="16" height="16" viewBox="0 0 24 24" fill="none"
+              stroke="rgba(255,255,255,0.3)" strokeWidth="2.5"
+              strokeLinecap="round" strokeLinejoin="round"
+              style={{ position: "absolute", left: "14px", top: "50%", transform: "translateY(-50%)", pointerEvents: "none" }}
+            >
+              <circle cx="11" cy="11" r="8" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+            <input
+              type="text"
+              placeholder="Пошук гри..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              style={{
+                width: "100%",
+                padding: "10px 14px 10px 40px",
+                borderRadius: "10px",
+                border: "1px solid rgba(255,255,255,0.08)",
+                background: "rgba(255,255,255,0.03)",
+                color: "#f0f0f0",
+                fontSize: "0.85rem",
+                outline: "none",
+                transition: "border-color 0.2s",
+              }}
+              onFocus={(e) => { e.currentTarget.style.borderColor = "rgba(255,255,255,0.2)"; }}
+              onBlur={(e) => { e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)"; }}
+            />
+          </div>
+
           <div style={{
             display: "flex",
             flexDirection: "column",
             gap: "8px",
           }}>
-            {projects.map((proj, i) => (
-              <button
-                key={proj.id}
-                onClick={() => goTo(i)}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "12px",
-                  padding: isMobile ? "12px 14px" : "14px 18px",
-                  borderRadius: "10px",
-                  border: i === current
-                    ? `1px solid ${proj.color}44`
-                    : "1px solid rgba(255,255,255,0.06)",
-                  background: i === current
-                    ? `${proj.color}0d`
-                    : "rgba(255,255,255,0.03)",
-                  cursor: "pointer",
-                  transition: "all 0.2s ease",
-                  textAlign: "left",
-                  width: "100%",
-                }}
-              >
-                {/* Number */}
-                <span style={{
-                  fontSize: "0.75rem",
-                  fontWeight: 600,
-                  color: "rgba(255,255,255,0.25)",
-                  minWidth: "20px",
-                }}>
-                  {String(i + 1).padStart(2, "0")}
-                </span>
+            {filteredProjects.map(({ proj, idx }) => {
+              const badgeColor = statusBadgeColor(proj);
+              const badgeLabel = proj.official ? "Офіційний" : (proj.badgeLabel || proj.statusLabel);
+              return (
+                <button
+                  key={proj.id}
+                  onClick={() => goTo(idx)}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "12px",
+                    padding: isMobile ? "12px 14px" : "14px 18px",
+                    borderRadius: "10px",
+                    border: idx === current
+                      ? `1px solid ${badgeColor}44`
+                      : "1px solid rgba(255,255,255,0.06)",
+                    background: idx === current
+                      ? `${badgeColor}0d`
+                      : "rgba(255,255,255,0.03)",
+                    cursor: "pointer",
+                    transition: "all 0.2s ease",
+                    textAlign: "left",
+                    width: "100%",
+                  }}
+                >
+                  {/* Number */}
+                  <span style={{
+                    fontSize: "0.75rem",
+                    fontWeight: 600,
+                    color: "rgba(255,255,255,0.25)",
+                    minWidth: "20px",
+                  }}>
+                    {String(idx + 1).padStart(2, "0")}
+                  </span>
 
-                {/* Name */}
-                <span style={{
-                  flex: 1,
-                  fontSize: isMobile ? "0.85rem" : "0.9rem",
-                  fontWeight: 600,
-                  color: i === current ? "#f0f0f0" : "rgba(255,255,255,0.6)",
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                  whiteSpace: "nowrap",
-                }}>
-                  {proj.name}
-                </span>
+                  {/* Name */}
+                  <span style={{
+                    flex: 1,
+                    fontSize: isMobile ? "0.85rem" : "0.9rem",
+                    fontWeight: 600,
+                    color: idx === current ? "#f0f0f0" : "rgba(255,255,255,0.6)",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap",
+                  }}>
+                    {proj.name}
+                  </span>
 
-                {/* Status badge */}
-                <span style={{
-                  padding: "3px 8px",
-                  borderRadius: "4px",
-                  fontSize: "0.65rem",
-                  fontWeight: 700,
-                  background: proj.official ? "#22c55e" : proj.color,
-                  color: "#fff",
-                  whiteSpace: "nowrap",
-                  flexShrink: 0,
-                }}>
-                  {proj.official ? "Офіційний" : (proj.badgeLabel || proj.statusLabel)}
-                </span>
+                  {/* Status badge */}
+                  <span style={{
+                    padding: "3px 8px",
+                    borderRadius: "4px",
+                    fontSize: "0.65rem",
+                    fontWeight: 700,
+                    background: badgeColor,
+                    color: "#fff",
+                    whiteSpace: "nowrap",
+                    flexShrink: 0,
+                  }}>
+                    {badgeLabel}
+                  </span>
 
-                {/* Download icon */}
-                {proj.downloadUrl && !proj.downloadDisabled && (
-                  <a
-                    href={proj.downloadUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={(e) => e.stopPropagation()}
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      width: "28px",
-                      height: "28px",
-                      borderRadius: "6px",
-                      background: "rgba(139,195,74,0.15)",
-                      color: "#8bc34a",
-                      flexShrink: 0,
-                      transition: "background 0.2s",
-                    }}
-                    onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(139,195,74,0.3)"; }}
-                    onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(139,195,74,0.15)"; }}
-                  >
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                      <polyline points="7 10 12 15 17 10" />
-                      <line x1="12" y1="15" x2="12" y2="3" />
-                    </svg>
-                  </a>
-                )}
-              </button>
-            ))}
+                  {/* Download icon */}
+                  {proj.downloadUrl && !proj.downloadDisabled && (
+                    <a
+                      href={proj.downloadUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={(e) => e.stopPropagation()}
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        width: "28px",
+                        height: "28px",
+                        borderRadius: "6px",
+                        background: "rgba(139,195,74,0.15)",
+                        color: "#8bc34a",
+                        flexShrink: 0,
+                        transition: "background 0.2s",
+                      }}
+                      onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(139,195,74,0.3)"; }}
+                      onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(139,195,74,0.15)"; }}
+                    >
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                        <polyline points="7 10 12 15 17 10" />
+                        <line x1="12" y1="15" x2="12" y2="3" />
+                      </svg>
+                    </a>
+                  )}
+                </button>
+              );
+            })}
+            {search && filteredProjects.length === 0 && (
+              <p style={{ textAlign: "center", color: "rgba(255,255,255,0.3)", fontSize: "0.85rem", padding: "16px 0" }}>
+                Нічого не знайдено
+              </p>
+            )}
           </div>
         </div>
       </motion.div>

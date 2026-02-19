@@ -193,7 +193,7 @@ export default function StatsSection() {
         animate={visible ? { opacity: 1, y: 0 } : {}}
         transition={{ duration: 0.6 }}
       >
-        <h2 className="mb-6 text-center text-3xl font-extrabold sm:text-4xl">
+        <h2 className="mb-8 text-center text-3xl font-extrabold sm:text-4xl">
           Статистика перекладу Persona 5 Royal
         </h2>
 
