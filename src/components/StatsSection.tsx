@@ -58,17 +58,39 @@ function AnimatedNumber({ value, suffix = "" }: { value: number; suffix?: string
 }
 
 function Persona5Block() {
-  // Fading tail on the doughnut: small segment after the red part
   const tailSize = Math.round(enLines * 0.04);
   const remaining = enLines - uaLines - tailSize;
+
+  // Pulsating tail opacity
+  const [tailOpacity, setTailOpacity] = useState(0.18);
+  useEffect(() => {
+    let frame: number;
+    const start = performance.now();
+    function pulse(now: number) {
+      const t = ((now - start) % 2000) / 2000; // 2s cycle
+      const ease = Math.sin(t * Math.PI); // 0 → 1 → 0
+      setTailOpacity(0.08 + ease * 0.25); // 0.08 → 0.33
+      frame = requestAnimationFrame(pulse);
+    }
+    frame = requestAnimationFrame(pulse);
+    return () => cancelAnimationFrame(frame);
+  }, []);
 
   const doughnutData = {
     labels: ["Українські рядки", "В процесі", "Залишок"],
     datasets: [
       {
         data: [uaLines, tailSize, remaining],
-        backgroundColor: ["#ef4444", "rgba(239,68,68,0.18)", "rgba(255,255,255,0.08)"],
-        borderColor: ["#ef4444", "rgba(239,68,68,0.08)", "rgba(255,255,255,0.05)"],
+        backgroundColor: [
+          "#ef4444",
+          `rgba(239,68,68,${tailOpacity})`,
+          "rgba(255,255,255,0.08)",
+        ],
+        borderColor: [
+          "#ef4444",
+          `rgba(239,68,68,${tailOpacity * 0.4})`,
+          "rgba(255,255,255,0.05)",
+        ],
         borderWidth: 1,
         cutout: "75%",
       },
@@ -86,6 +108,7 @@ function Persona5Block() {
               options={{
                 responsive: true,
                 maintainAspectRatio: false,
+                animation: { duration: 0 },
                 plugins: {
                   legend: { display: false },
                   tooltip: { enabled: false },

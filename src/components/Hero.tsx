@@ -1,7 +1,9 @@
 import { motion } from "framer-motion";
 
-const title = "Солов'їна команда";
-const letters = title.split("");
+const line1 = "СОЛОВ'ЇНА";
+const line2 = "КОМАНДА";
+const letters1 = line1.split("");
+const letters2 = line2.split("");
 
 const containerVariants = {
   hidden: {},
@@ -33,6 +35,16 @@ const letterVariants = {
   },
 };
 
+const line2Variants = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.05,
+      delayChildren: 0.3 + letters1.length * 0.05,
+    },
+  },
+};
+
 const subtitleVariants = {
   hidden: { opacity: 0, y: 20 },
   visible: {
@@ -51,6 +63,10 @@ const ctaVariants = {
   },
 };
 
+const glowStyle = {
+  textShadow: "0 0 40px rgba(139,195,74,0.3), 0 0 80px rgba(139,195,74,0.15), 0 0 120px rgba(139,195,74,0.05)",
+};
+
 export default function Hero() {
   return (
     <section
@@ -66,39 +82,73 @@ export default function Hero() {
         textAlign: "center",
       }}
     >
-      <motion.h1
-        style={{
-          display: "flex",
-          flexWrap: "wrap",
-          justifyContent: "center",
-          fontSize: "clamp(2.5rem, 7vw, 5rem)",
-          fontWeight: 800,
-          letterSpacing: "-0.02em",
-          marginBottom: "1.5rem",
-        }}
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
-        aria-label={title}
-      >
-        {letters.map((letter, i) => (
-          <motion.span
-            key={i}
-            variants={letterVariants}
-            style={{
-              display: "inline-block",
-              marginRight: letter === " " ? "0.3em" : "0",
-              background: "linear-gradient(135deg, #f0f0f0 0%, #a0a0a8 100%)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              backgroundClip: "text",
-            }}
-            aria-hidden="true"
-          >
-            {letter === " " ? "\u00A0" : letter}
-          </motion.span>
-        ))}
-      </motion.h1>
+      <div style={{ marginBottom: "1.5rem", ...glowStyle }}>
+        {/* Line 1: СОЛОВ'ЇНА */}
+        <motion.div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            fontSize: "clamp(2.8rem, 8vw, 5.5rem)",
+            fontWeight: 900,
+            letterSpacing: "0.06em",
+            lineHeight: 1.1,
+          }}
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+          aria-label="СОЛОВ'ЇНА"
+        >
+          {letters1.map((letter, i) => (
+            <motion.span
+              key={i}
+              variants={letterVariants}
+              style={{
+                display: "inline-block",
+                background: "linear-gradient(135deg, #ffffff 0%, #c8c8d0 50%, #a0a0a8 100%)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                backgroundClip: "text",
+              }}
+              aria-hidden="true"
+            >
+              {letter}
+            </motion.span>
+          ))}
+        </motion.div>
+
+        {/* Line 2: КОМАНДА */}
+        <motion.div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            fontSize: "clamp(2.8rem, 8vw, 5.5rem)",
+            fontWeight: 900,
+            letterSpacing: "0.06em",
+            lineHeight: 1.1,
+          }}
+          variants={line2Variants}
+          initial="hidden"
+          animate="visible"
+          aria-label="КОМАНДА"
+        >
+          {letters2.map((letter, i) => (
+            <motion.span
+              key={i}
+              variants={letterVariants}
+              style={{
+                display: "inline-block",
+                background: "linear-gradient(135deg, #ffffff 0%, #c8c8d0 50%, #a0a0a8 100%)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                backgroundClip: "text",
+              }}
+              aria-hidden="true"
+            >
+              {letter}
+            </motion.span>
+          ))}
+        </motion.div>
+      </div>
 
       <motion.p
         style={{ marginBottom: "2.5rem", fontSize: "clamp(1rem, 2.5vw, 1.5rem)", color: "#a0a0a8" }}
@@ -108,49 +158,6 @@ export default function Hero() {
       >
         Повернулися, працюємо!
       </motion.p>
-
-      <motion.div
-        style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "1rem" }}
-        variants={ctaVariants}
-        initial="hidden"
-        animate="visible"
-      >
-        <a href="#projects" className="btn-primary">
-          <svg
-            width="18"
-            height="18"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            aria-hidden="true"
-          >
-            <rect x="3" y="3" width="7" height="7" />
-            <rect x="14" y="3" width="7" height="7" />
-            <rect x="3" y="14" width="7" height="7" />
-            <rect x="14" y="14" width="7" height="7" />
-          </svg>
-          Наші проєкти
-        </a>
-        <a href="#support" className="btn-ghost">
-          <svg
-            width="18"
-            height="18"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            aria-hidden="true"
-          >
-            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-          </svg>
-          Підтримати
-        </a>
-      </motion.div>
 
       {/* Scroll indicator */}
       <motion.div
