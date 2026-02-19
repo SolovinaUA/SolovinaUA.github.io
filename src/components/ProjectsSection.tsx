@@ -164,13 +164,27 @@ export default function ProjectsSection() {
         onClick={() => { if (!isActive) setCurrent(idx); }}
       >
         {/* Background image or gradient */}
-        <div style={{
-          position: "absolute",
-          inset: 0,
-          background: proj.image
-            ? `url(${proj.image}) center/cover no-repeat`
-            : proj.gradient,
-        }} />
+        {proj.image ? (
+          <img
+            src={proj.image}
+            alt={proj.name}
+            loading="eager"
+            decoding="async"
+            style={{
+              position: "absolute",
+              inset: 0,
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+            }}
+          />
+        ) : (
+          <div style={{
+            position: "absolute",
+            inset: 0,
+            background: proj.gradient,
+          }} />
+        )}
 
         {/* Inactive overlay */}
         {!isActive && (
