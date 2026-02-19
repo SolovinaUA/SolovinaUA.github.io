@@ -15,7 +15,7 @@ export const projects: Project[] = [
     id: "persona5",
     name: "Persona 5 Royal",
     status: "in-progress",
-    statusLabel: "У роботі",
+    statusLabel: "Ранній доступ!",
     official: false,
     color: "#ef4444",
     gradient: "linear-gradient(135deg, #1a1a2e 0%, #16213e 30%, #e94560 100%)",
@@ -59,5 +59,6 @@ export const projects: Project[] = [
     official: true,
     color: "#eab308",
     gradient: "linear-gradient(135deg, #1a1500 0%, #3d2e06 40%, #eab308 100%)",
+    image: "https://shared.steamstatic.com/store_item_assets/steam/apps/1072290/042f7f1eed524de381b28473cdf2fc1ea77a77f6/library_hero_2x.jpg",
   },
 ];

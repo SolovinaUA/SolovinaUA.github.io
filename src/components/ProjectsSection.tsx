@@ -225,7 +225,9 @@ export default function ProjectsSection() {
             </button>
 
             <a
-              href="#"
+              href="https://lbklauncher.com/"
+              target="_blank"
+              rel="noopener noreferrer"
               onClick={(e) => e.stopPropagation()}
               style={{
                 display: "flex",
