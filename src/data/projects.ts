@@ -30,7 +30,7 @@ export const projects: Project[] = [
     id: "dave-the-diver",
     name: "Dave The Diver",
     status: "waiting",
-    statusLabel: "Чекає оновлення",
+    statusLabel: "Оновимо у 2026 році, після виходу завантажуваного вмісту!",
     official: false,
     color: "#3b82f6",
     gradient: "linear-gradient(135deg, #0c1445 0%, #1a3a6b 40%, #2196f3 100%)",
