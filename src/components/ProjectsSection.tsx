@@ -265,7 +265,7 @@ export default function ProjectsSection() {
                 borderRadius: "4px",
                 fontSize: "0.7rem",
                 fontWeight: 700,
-                background: proj.official ? "#22c55e" : proj.color,
+                background: statusBadgeColor(proj),
                 color: "#fff",
               }}>
                 {proj.official ? "Офіційний переклад" : (proj.badgeLabel || proj.statusLabel)}

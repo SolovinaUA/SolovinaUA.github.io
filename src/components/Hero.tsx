@@ -81,7 +81,7 @@ export default function Hero() {
             fontSize: "clamp(2.8rem, 8vw, 5.5rem)",
             fontWeight: 900,
             letterSpacing: "0.06em",
-            lineHeight: 1.1,
+            lineHeight: 1.2,
             filter: blueGlow,
           }}
           variants={containerVariants}
