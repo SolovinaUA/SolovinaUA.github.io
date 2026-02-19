@@ -22,11 +22,15 @@ const linkVariants = {
 };
 
 export default function Navbar() {
-  const [scrolled, setScrolled] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0);
   const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 20);
+    const handleScroll = () => {
+      // Gradually darken over 0–300px of scroll
+      const progress = Math.min(window.scrollY / 300, 1);
+      setScrollProgress(progress);
+    };
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -52,15 +56,12 @@ export default function Navbar() {
           left: 0,
           right: 0,
           zIndex: 50,
-          transition: "all 0.3s ease",
-          background: scrolled || mobileOpen
+          background: mobileOpen
             ? "rgba(14, 14, 16, 0.92)"
-            : "rgba(14, 14, 16, 0.25)",
-          backdropFilter: scrolled || mobileOpen ? "blur(20px) saturate(1.4)" : "blur(12px)",
-          WebkitBackdropFilter: scrolled || mobileOpen ? "blur(20px) saturate(1.4)" : "blur(12px)",
-          borderBottom: scrolled
-            ? "1px solid rgba(255,255,255,0.06)"
-            : "1px solid transparent",
+            : `rgba(14, 14, 16, ${0.15 + scrollProgress * 0.77})`,
+          backdropFilter: `blur(${8 + scrollProgress * 12}px)`,
+          WebkitBackdropFilter: `blur(${8 + scrollProgress * 12}px)`,
+          borderBottom: `1px solid rgba(255,255,255,${scrollProgress * 0.06})`,
         }}
         role="navigation"
         aria-label="Головна навігація"
@@ -72,8 +73,7 @@ export default function Navbar() {
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          height: scrolled ? "52px" : "60px",
-          transition: "height 0.3s ease",
+          height: `${60 - scrollProgress * 8}px`,
         }}>
           {/* Logo */}
           <a
