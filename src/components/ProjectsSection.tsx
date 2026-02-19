@@ -249,7 +249,7 @@ export default function ProjectsSection() {
                 background: proj.official ? "#22c55e" : proj.color,
                 color: "#fff",
               }}>
-                {proj.official ? "Офіційний переклад" : proj.statusLabel}
+                {proj.official ? "Офіційний переклад" : (proj.badgeLabel || proj.statusLabel)}
               </span>
 
               {proj.downloadUrl && (

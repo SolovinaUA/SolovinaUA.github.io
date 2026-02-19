@@ -10,6 +10,7 @@ export interface Project {
   downloadUrl?: string;
   downloadLabel?: string;
   downloadDisabled?: boolean;
+  badgeLabel?: string;
 }
 
 // TODO: замінити дані на реальні
@@ -38,6 +39,7 @@ export const projects: Project[] = [
     downloadUrl: "#",
     downloadLabel: "Завантажити",
     downloadDisabled: true,
+    badgeLabel: "Чекає оновлення",
   },
   {
     id: "the-missing",
