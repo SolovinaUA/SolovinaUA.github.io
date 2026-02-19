@@ -78,6 +78,47 @@ export default function ProjectsSection() {
     }
   };
 
+  // Auto-advance every 5 seconds
+  const [progress, setProgress] = useState(0);
+  const autoplayRef = useRef<number>(0);
+  const lastTimeRef = useRef<number>(0);
+
+  useEffect(() => {
+    setProgress(0);
+    lastTimeRef.current = performance.now();
+
+    const tick = (now: number) => {
+      const elapsed = now - lastTimeRef.current;
+      const pct = Math.min(elapsed / 5000, 1);
+      setProgress(pct);
+      if (pct >= 1) {
+        goNext();
+        return;
+      }
+      autoplayRef.current = requestAnimationFrame(tick);
+    };
+    autoplayRef.current = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(autoplayRef.current);
+  }, [current, goNext]);
+
+  // Reset timer on manual interaction
+  const resetTimer = useCallback(() => {
+    cancelAnimationFrame(autoplayRef.current);
+    setProgress(0);
+    lastTimeRef.current = performance.now();
+    const tick = (now: number) => {
+      const elapsed = now - lastTimeRef.current;
+      const pct = Math.min(elapsed / 5000, 1);
+      setProgress(pct);
+      if (pct >= 1) {
+        goNext();
+        return;
+      }
+      autoplayRef.current = requestAnimationFrame(tick);
+    };
+    autoplayRef.current = requestAnimationFrame(tick);
+  }, [goNext]);
+
   const getIndex = (offset: number) => (current + offset + total) % total;
   const slots = [-1, 0, 1] as const;
   const project = projects[current];
@@ -303,9 +344,9 @@ export default function ProjectsSection() {
             aria-label="Попередня гра"
             style={{
               position: "absolute",
-              left: isMobile ? "8px" : "calc(21.5% - 8px)",
+              left: isMobile ? "24px" : "calc(21.5% - 8px)",
               top: "50%",
-              transform: "translate(-50%, -50%)",
+              transform: isMobile ? "translateY(-50%)" : "translate(-50%, -50%)",
               zIndex: 10,
               width: isMobile ? "36px" : "44px",
               height: isMobile ? "36px" : "44px",
@@ -334,9 +375,9 @@ export default function ProjectsSection() {
             aria-label="Наступна гра"
             style={{
               position: "absolute",
-              right: isMobile ? "8px" : "calc(21.5% - 8px)",
+              right: isMobile ? "24px" : "calc(21.5% - 8px)",
               top: "50%",
-              transform: "translate(50%, -50%)",
+              transform: isMobile ? "translateY(-50%)" : "translate(50%, -50%)",
               zIndex: 10,
               width: isMobile ? "36px" : "44px",
               height: isMobile ? "36px" : "44px",
@@ -391,12 +432,13 @@ export default function ProjectsSection() {
             )}
           </div>
 
-          {/* Dot indicators */}
+          {/* Progress indicators */}
           <div style={{
             display: "flex",
             justifyContent: "center",
-            gap: "8px",
+            gap: "6px",
             marginTop: "16px",
+            padding: "0 16px",
           }}>
             {projects.map((p, i) => (
               <button
@@ -404,16 +446,39 @@ export default function ProjectsSection() {
                 onClick={() => goTo(i)}
                 aria-label={`Перейти до ${p.name}`}
                 style={{
-                  width: i === current ? "28px" : "8px",
+                  width: i === current ? "32px" : "8px",
                   height: "4px",
                   borderRadius: "2px",
                   border: "none",
-                  background: i === current ? p.color : "rgba(255,255,255,0.2)",
+                  background: "rgba(255,255,255,0.15)",
                   cursor: "pointer",
                   padding: 0,
-                  transition: "all 0.3s ease",
+                  position: "relative",
+                  overflow: "hidden",
+                  transition: "width 0.3s ease",
                 }}
-              />
+              >
+                {i === current && (
+                  <div style={{
+                    position: "absolute",
+                    left: 0,
+                    top: 0,
+                    bottom: 0,
+                    width: `${progress * 100}%`,
+                    background: p.color,
+                    borderRadius: "2px",
+                  }} />
+                )}
+                {i < current && (
+                  <div style={{
+                    position: "absolute",
+                    inset: 0,
+                    background: p.color,
+                    opacity: 0.4,
+                    borderRadius: "2px",
+                  }} />
+                )}
+              </button>
             ))}
           </div>
         </div>
