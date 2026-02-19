@@ -156,28 +156,53 @@ export default function Hero() {
         initial="hidden"
         animate="visible"
       >
-        Повернулися, працюємо!
+        Живі, працюємо!
       </motion.p>
 
-      {/* Scroll indicator */}
-      <motion.div
-        style={{ position: "absolute", bottom: "2rem", left: "50%", transform: "translateX(-50%)" }}
-        animate={{ y: [0, 10, 0] }}
+      {/* Scroll indicator — clickable link to projects */}
+      <motion.a
+        href="#projects"
+        style={{
+          position: "absolute",
+          bottom: "2rem",
+          left: "50%",
+          transform: "translateX(-50%)",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: "6px",
+          textDecoration: "none",
+          color: "#a0a0a8",
+          cursor: "pointer",
+          transition: "color 0.2s ease",
+        }}
+        animate={{ y: [0, 6, 0] }}
         transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-        aria-hidden="true"
+        onMouseEnter={(e) => { e.currentTarget.style.color = "#f0f0f0"; }}
+        onMouseLeave={(e) => { e.currentTarget.style.color = "#a0a0a8"; }}
       >
+        <span style={{
+          fontSize: "0.7rem",
+          fontWeight: 700,
+          letterSpacing: "0.12em",
+          textTransform: "uppercase",
+          opacity: 0.7,
+        }}>
+          Наші проєкти
+        </span>
         <svg
-          width="24"
-          height="24"
+          width="20"
+          height="20"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
-          strokeWidth="2"
-          style={{ color: "#a0a0a8", opacity: 0.5 }}
+          strokeWidth="2.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
         >
-          <path d="M12 5v14M19 12l-7 7-7-7" />
+          <polyline points="6 9 12 15 18 9" />
         </svg>
-      </motion.div>
+      </motion.a>
     </section>
   );
 }
