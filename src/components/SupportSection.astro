@@ -29,7 +29,7 @@ const donateLinks = [
     Добровільна фінансова підтримка нашої діяльності = більше часу на переклад і тестування!
   </p>
 
-  <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;">
+  <div class="donate-grid">
     {donateLinks.map((link) => (
       <a
         href={link.href}
@@ -56,6 +56,26 @@ const donateLinks = [
 </section>
 
 <style>
+  .donate-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+  @media (max-width: 480px) {
+    .donate-grid {
+      gap: 8px;
+    }
+    .donate-card__icon {
+      padding: 20px 8px !important;
+    }
+    .donate-card__info {
+      padding: 10px 8px !important;
+    }
+    .donate-card__name {
+      font-size: 0.82rem !important;
+      text-align: center;
+    }
+  }
   .donate-card {
     display: flex;
     flex-direction: column;

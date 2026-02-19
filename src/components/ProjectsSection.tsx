@@ -516,9 +516,9 @@ export default function ProjectsSection() {
           </div>
         </div>
 
-        {/* === Project List === */}
+        {/* === Project Grid === */}
         <div style={{
-          maxWidth: "720px",
+          maxWidth: "960px",
           margin: isMobile ? "36px auto 0" : "56px auto 0",
           padding: "0 16px",
         }}>
@@ -533,7 +533,7 @@ export default function ProjectsSection() {
           </h3>
 
           {/* Search */}
-          <div style={{ position: "relative", marginBottom: "12px" }}>
+          <div style={{ position: "relative", marginBottom: "12px", maxWidth: "400px", margin: "0 auto 12px" }}>
             <svg
               width="16" height="16" viewBox="0 0 24 24" fill="none"
               stroke="rgba(255,255,255,0.3)" strokeWidth="2.5"
@@ -565,8 +565,8 @@ export default function ProjectsSection() {
           </div>
 
           <div style={{
-            display: "flex",
-            flexDirection: "column",
+            display: "grid",
+            gridTemplateColumns: isMobile ? "repeat(2, 1fr)" : "repeat(5, 1fr)",
             gap: "8px",
           }}>
             {filteredProjects.map(({ proj, idx }) => {
@@ -578,9 +578,10 @@ export default function ProjectsSection() {
                   onClick={() => goTo(idx)}
                   style={{
                     display: "flex",
+                    flexDirection: "column",
                     alignItems: "center",
-                    gap: "12px",
-                    padding: isMobile ? "12px 14px" : "14px 18px",
+                    gap: "8px",
+                    padding: "14px 10px",
                     borderRadius: "10px",
                     border: idx === current
                       ? `1px solid ${badgeColor}44`
@@ -590,85 +591,76 @@ export default function ProjectsSection() {
                       : "rgba(255,255,255,0.03)",
                     cursor: "pointer",
                     transition: "all 0.2s ease",
-                    textAlign: "left",
+                    textAlign: "center",
                     width: "100%",
                   }}
                 >
-                  {/* Number */}
-                  <span style={{
-                    fontSize: "0.75rem",
-                    fontWeight: 600,
-                    color: "rgba(255,255,255,0.25)",
-                    minWidth: "20px",
-                  }}>
-                    {String(idx + 1).padStart(2, "0")}
-                  </span>
-
                   {/* Name */}
                   <span style={{
-                    flex: 1,
-                    fontSize: isMobile ? "0.85rem" : "0.9rem",
+                    fontSize: "0.78rem",
                     fontWeight: 600,
                     color: idx === current ? "#f0f0f0" : "rgba(255,255,255,0.6)",
                     overflow: "hidden",
                     textOverflow: "ellipsis",
                     whiteSpace: "nowrap",
+                    width: "100%",
+                    lineHeight: 1.3,
                   }}>
                     {proj.name}
                   </span>
 
-                  {/* Status badge */}
-                  <span style={{
-                    padding: "3px 8px",
-                    borderRadius: "4px",
-                    fontSize: "0.65rem",
-                    fontWeight: 700,
-                    background: badgeColor,
-                    color: "#fff",
-                    whiteSpace: "nowrap",
-                    flexShrink: 0,
-                  }}>
-                    {badgeLabel}
-                  </span>
+                  {/* Status badge + download */}
+                  <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
+                    <span style={{
+                      padding: "2px 6px",
+                      borderRadius: "4px",
+                      fontSize: "0.6rem",
+                      fontWeight: 700,
+                      background: badgeColor,
+                      color: "#fff",
+                      whiteSpace: "nowrap",
+                    }}>
+                      {badgeLabel}
+                    </span>
 
-                  {/* Download icon */}
-                  {proj.downloadUrl && !proj.downloadDisabled && (
-                    <a
-                      href={proj.downloadUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onClick={(e) => e.stopPropagation()}
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        width: "28px",
-                        height: "28px",
-                        borderRadius: "6px",
-                        background: "rgba(139,195,74,0.15)",
-                        color: "#8bc34a",
-                        flexShrink: 0,
-                        transition: "background 0.2s",
-                      }}
-                      onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(139,195,74,0.3)"; }}
-                      onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(139,195,74,0.15)"; }}
-                    >
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                        <polyline points="7 10 12 15 17 10" />
-                        <line x1="12" y1="15" x2="12" y2="3" />
-                      </svg>
-                    </a>
-                  )}
+                    {proj.downloadUrl && !proj.downloadDisabled && (
+                      <a
+                        href={proj.downloadUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={(e) => e.stopPropagation()}
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          width: "22px",
+                          height: "22px",
+                          borderRadius: "4px",
+                          background: "rgba(139,195,74,0.15)",
+                          color: "#8bc34a",
+                          flexShrink: 0,
+                          transition: "background 0.2s",
+                        }}
+                        onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(139,195,74,0.3)"; }}
+                        onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(139,195,74,0.15)"; }}
+                      >
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                          <polyline points="7 10 12 15 17 10" />
+                          <line x1="12" y1="15" x2="12" y2="3" />
+                        </svg>
+                      </a>
+                    )}
+                  </div>
                 </button>
               );
             })}
-            {search && filteredProjects.length === 0 && (
-              <p style={{ textAlign: "center", color: "rgba(255,255,255,0.3)", fontSize: "0.85rem", padding: "16px 0" }}>
-                Нічого не знайдено
-              </p>
-            )}
           </div>
+          {search && filteredProjects.length === 0 && (
+            <p style={{ textAlign: "center", color: "rgba(255,255,255,0.3)", fontSize: "0.85rem", padding: "16px 0" }}>
+              Нічого не знайдено
+            </p>
+          )}
         </div>
       </motion.div>
     </section>
