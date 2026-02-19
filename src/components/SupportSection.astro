@@ -1,0 +1,122 @@
+---
+const donateLinks = [
+  {
+    name: "Монобанк",
+    href: "#", // TODO: додати реальне посилання
+    icon: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>`,
+    color: "#f0f0f0",
+  },
+  {
+    name: "Donatello",
+    href: "https://donatello.to/solovina_ua/",
+    icon: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>`,
+    color: "#ff6b6b",
+  },
+  {
+    name: "Приват24",
+    href: "https://next.privat24.ua/send/bdchm",
+    icon: `<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none"><text x="12" y="18" text-anchor="middle" font-size="20" font-weight="700" font-family="Arial, sans-serif">₴</text></svg>`,
+    color: "#3ea642",
+  },
+];
+---
+
+<section id="support" class="section-reveal" style="max-width: 900px; margin: 0 auto; padding: 80px 16px;">
+  <h2 style="text-align: center; font-size: clamp(1.8rem, 4vw, 2.5rem); font-weight: 800; color: #f0f0f0; margin-bottom: 8px;">
+    Підтримати фінансово
+  </h2>
+  <p style="text-align: center; color: #a0a0a8; margin-bottom: 40px;">
+    Підтримка = більше часу на переклад і тестування
+  </p>
+
+  <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;">
+    {donateLinks.map((link) => (
+      <a
+        href={link.href}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="donate-card"
+        style={`--card-color: ${link.color};`}
+        aria-label={`Підтримати через ${link.name}`}
+      >
+        {/* Icon area — top section with colored background */}
+        <div class="donate-card__icon">
+          <div style={`width: 56px; height: 56px; display: flex; align-items: center; justify-content: center; border-radius: 14px; background: ${link.color}25; color: ${link.color};`}>
+            <Fragment set:html={link.icon} />
+          </div>
+        </div>
+        {/* Bottom section — name + action */}
+        <div class="donate-card__info">
+          <span class="donate-card__name">{link.name}</span>
+          <span class="donate-card__action" style={`color: ${link.color};`}>Підтримати →</span>
+        </div>
+      </a>
+    ))}
+  </div>
+</section>
+
+<style>
+  .donate-card {
+    display: flex;
+    flex-direction: column;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(30, 30, 35, 0.8);
+    text-decoration: none;
+    overflow: hidden;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+  }
+  .donate-card:hover {
+    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+    transform: translateY(-2px);
+  }
+  .donate-card__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 16px;
+    background: rgba(255, 255, 255, 0.02);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  }
+  .donate-card__info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 14px 16px;
+  }
+  .donate-card__name {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #f0f0f0;
+    line-height: 1.3;
+  }
+  .donate-card__action {
+    font-size: 0.8rem;
+    font-weight: 600;
+    opacity: 0;
+    transform: translateX(-4px);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+  .donate-card:hover .donate-card__action {
+    opacity: 1;
+    transform: translateX(0);
+  }
+</style>
+
+<script>
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("visible");
+        }
+      });
+    },
+    { threshold: 0.1 }
+  );
+
+  document.querySelectorAll(".section-reveal").forEach((el) => {
+    observer.observe(el);
+  });
+</script>

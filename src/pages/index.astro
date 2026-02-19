@@ -1,0 +1,25 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Hero from "../components/Hero.tsx";
+import Navbar from "../components/Navbar.tsx";
+import ProjectsSection from "../components/ProjectsSection.tsx";
+import SupportSection from "../components/SupportSection.astro";
+import StatsSection from "../components/StatsSection.tsx";
+---
+
+<Layout title="Солов'їна команда — Українська локалізація ігор">
+  <Navbar client:load />
+  <main>
+    <Hero client:load />
+    <ProjectsSection client:visible />
+    <SupportSection />
+    <StatsSection client:visible />
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-[--color-border] py-8 text-center text-sm text-[--color-text-secondary]">
+    <p>
+      &copy; {new Date().getFullYear()} Солов'їна команда. Усі права захищено.
+    </p>
+  </footer>
+</Layout>
