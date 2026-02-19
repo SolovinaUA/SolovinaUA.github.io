@@ -9,6 +9,7 @@ export interface Project {
   image?: string;
   downloadUrl?: string;
   downloadLabel?: string;
+  downloadDisabled?: boolean;
 }
 
 // TODO: замінити дані на реальні
@@ -34,6 +35,9 @@ export const projects: Project[] = [
     color: "#3b82f6",
     gradient: "linear-gradient(135deg, #0c1445 0%, #1a3a6b 40%, #2196f3 100%)",
     image: "https://cdn2.steamgriddb.com/grid/1d50a96e0e3d7b721de8aafbb246067d.png",
+    downloadUrl: "#",
+    downloadLabel: "Завантажити",
+    downloadDisabled: true,
   },
   {
     id: "the-missing",

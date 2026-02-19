@@ -226,29 +226,33 @@ export default function ProjectsSection() {
 
             {project.downloadUrl && (
               <a
-                href={project.downloadUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={(e) => e.stopPropagation()}
+                href={project.downloadDisabled ? undefined : project.downloadUrl}
+                target={project.downloadDisabled ? undefined : "_blank"}
+                rel={project.downloadDisabled ? undefined : "noopener noreferrer"}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (project.downloadDisabled) e.preventDefault();
+                }}
                 style={{
                   display: "flex",
                   alignItems: "center",
                   gap: "6px",
                   height: "40px",
                   padding: "0 18px",
-                  background: "#8bc34a",
-                  color: "#1b1b1b",
+                  background: project.downloadDisabled ? "rgba(255,255,255,0.08)" : "#8bc34a",
+                  color: project.downloadDisabled ? "rgba(255,255,255,0.3)" : "#1b1b1b",
                   borderRadius: "6px",
                   fontSize: "0.9rem",
                   fontWeight: 700,
                   textDecoration: "none",
-                  border: "none",
-                  cursor: "pointer",
+                  border: project.downloadDisabled ? "1px solid rgba(255,255,255,0.1)" : "none",
+                  cursor: project.downloadDisabled ? "not-allowed" : "pointer",
                   transition: "all 0.2s ease",
                   whiteSpace: "nowrap",
+                  opacity: project.downloadDisabled ? 0.6 : 1,
                 }}
-                onMouseEnter={(e) => { e.currentTarget.style.background = "#9ccc65"; }}
-                onMouseLeave={(e) => { e.currentTarget.style.background = "#8bc34a"; }}
+                onMouseEnter={(e) => { if (!project.downloadDisabled) e.currentTarget.style.background = "#9ccc65"; }}
+                onMouseLeave={(e) => { if (!project.downloadDisabled) e.currentTarget.style.background = "#8bc34a"; }}
               >
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
