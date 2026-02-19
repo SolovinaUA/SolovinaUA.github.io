@@ -6,7 +6,7 @@ import tailwindcss from '@tailwindcss/vite';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://Solovina.github.io',
+  site: 'https://solovinaua.github.io',
   output: 'static',
   integrations: [react()],
 
