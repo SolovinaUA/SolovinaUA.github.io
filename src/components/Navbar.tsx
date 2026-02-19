@@ -54,10 +54,10 @@ export default function Navbar() {
           zIndex: 50,
           transition: "all 0.3s ease",
           background: scrolled || mobileOpen
-            ? "rgba(14, 14, 16, 0.75)"
-            : "transparent",
-          backdropFilter: scrolled || mobileOpen ? "blur(20px) saturate(1.4)" : "none",
-          WebkitBackdropFilter: scrolled || mobileOpen ? "blur(20px) saturate(1.4)" : "none",
+            ? "rgba(14, 14, 16, 0.92)"
+            : "rgba(14, 14, 16, 0.25)",
+          backdropFilter: scrolled || mobileOpen ? "blur(20px) saturate(1.4)" : "blur(12px)",
+          WebkitBackdropFilter: scrolled || mobileOpen ? "blur(20px) saturate(1.4)" : "blur(12px)",
           borderBottom: scrolled
             ? "1px solid rgba(255,255,255,0.06)"
             : "1px solid transparent",

@@ -58,13 +58,17 @@ function AnimatedNumber({ value, suffix = "" }: { value: number; suffix?: string
 }
 
 function Persona5Block() {
+  // Fading tail on the doughnut: small segment after the red part
+  const tailSize = Math.round(enLines * 0.04);
+  const remaining = enLines - uaLines - tailSize;
+
   const doughnutData = {
-    labels: ["Українські рядки", "Англійські рядки (залишок)"],
+    labels: ["Українські рядки", "В процесі", "Залишок"],
     datasets: [
       {
-        data: [uaLines, enLines - uaLines],
-        backgroundColor: ["#ef4444", "rgba(255,255,255,0.08)"],
-        borderColor: ["#ef4444", "rgba(255,255,255,0.05)"],
+        data: [uaLines, tailSize, remaining],
+        backgroundColor: ["#ef4444", "rgba(239,68,68,0.18)", "rgba(255,255,255,0.08)"],
+        borderColor: ["#ef4444", "rgba(239,68,68,0.08)", "rgba(255,255,255,0.05)"],
         borderWidth: 1,
         cutout: "75%",
       },
@@ -116,32 +120,19 @@ function Persona5Block() {
             </p>
           </div>
 
-          {/* Progress bar with fading tail */}
+          {/* Progress bar */}
           <div>
             <div className="mb-1 flex justify-between text-xs text-[--color-text-secondary]">
               <span>Прогрес</span>
               <span>{persona5OverallPercent}%</span>
             </div>
-            <div className="relative h-3 w-full rounded-full bg-white/10">
-              {/* Main filled bar */}
+            <div className="h-3 w-full overflow-hidden rounded-full bg-white/10">
               <motion.div
-                className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-[#ef4444] to-[#f97316]"
+                className="h-full rounded-full bg-gradient-to-r from-[#ef4444] to-[#f97316]"
                 initial={{ width: 0 }}
                 whileInView={{ width: `${persona5OverallPercent}%` }}
                 viewport={{ once: true }}
                 transition={{ duration: 1.2, ease: "easeOut", delay: 0.3 }}
-              />
-              {/* Fading tail — extends beyond the main bar */}
-              <motion.div
-                className="absolute inset-y-0 rounded-full"
-                style={{
-                  left: `${persona5OverallPercent}%`,
-                  background: "linear-gradient(to right, rgba(249,115,22,0.35), rgba(249,115,22,0))",
-                }}
-                initial={{ width: 0 }}
-                whileInView={{ width: "12%" }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8, ease: "easeOut", delay: 1.2 }}
               />
             </div>
           </div>

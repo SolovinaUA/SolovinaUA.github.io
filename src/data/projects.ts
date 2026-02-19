@@ -41,7 +41,7 @@ export const projects: Project[] = [
   },
   {
     id: "the-missing",
-    name: "The MISSING",
+    name: "The MISSING: J.J. Macfield and the Island of Memories",
     status: "someday",
     statusLabel: "Колись вийде",
     official: false,
