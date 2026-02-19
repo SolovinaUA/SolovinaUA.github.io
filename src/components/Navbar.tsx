@@ -100,14 +100,8 @@ export default function Navbar() {
             />
           </a>
 
-          {/* Desktop links */}
-          <div style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "2px",
-          }}
-            className="hidden sm:flex"
-          >
+          {/* Desktop links — no inline display, let Tailwind handle visibility */}
+          <div className="hidden sm:flex items-center gap-0.5">
             {navLinks.map((link) => (
               <a
                 key={link.href}
@@ -165,18 +159,15 @@ export default function Navbar() {
             </a>
           </div>
 
-          {/* Mobile burger */}
+          {/* Mobile burger — no inline display */}
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
             aria-label={mobileOpen ? "Закрити меню" : "Відкрити меню"}
             aria-expanded={mobileOpen}
-            className="sm:hidden"
+            className="flex sm:hidden items-center justify-center"
             style={{
               width: "36px",
               height: "36px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
               borderRadius: "8px",
               border: "none",
               background: "transparent",
@@ -228,23 +219,17 @@ export default function Navbar() {
         </div>
       </motion.nav>
 
-      {/* Fullscreen mobile menu */}
+      {/* Fullscreen mobile menu — no inline display, Tailwind handles visibility on desktop */}
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.25 }}
-            className="sm:hidden"
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 z-40 flex-col items-center justify-center sm:hidden"
             style={{
-              position: "fixed",
-              inset: 0,
-              zIndex: 40,
               display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
               background: "rgba(14, 14, 16, 0.96)",
               backdropFilter: "blur(24px)",
               WebkitBackdropFilter: "blur(24px)",
@@ -268,7 +253,7 @@ export default function Navbar() {
                     fontWeight: 600,
                     color: "rgba(255,255,255,0.6)",
                     textDecoration: "none",
-                    transition: "all 0.2s ease",
+                    transition: "color 0.2s ease, background 0.2s ease",
                   }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.color = "rgba(255,255,255,0.95)";
@@ -302,7 +287,6 @@ export default function Navbar() {
                   color: "#1b1b1b",
                   background: "#8bc34a",
                   textDecoration: "none",
-                  transition: "all 0.2s ease",
                 }}
               >
                 LBK Launcher

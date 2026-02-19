@@ -93,7 +93,7 @@ body {
   border-radius: 50%;
   filter: blur(80px);
   opacity: 0.15;
-  animation: blobFloat 20s ease-in-out infinite alternate;
+  animation: blobFloat 20s ease-in-out infinite alternate, blobPulse 6s ease-in-out infinite;
 }
 
 .blob-1 {
@@ -102,7 +102,7 @@ body {
   background: #6d5dfc;
   top: -10%;
   left: -5%;
-  animation-duration: 22s;
+  animation-duration: 22s, 6s;
 }
 
 .blob-2 {
@@ -111,8 +111,8 @@ body {
   background: #ef4444;
   top: 40%;
   right: -10%;
-  animation-duration: 18s;
-  animation-delay: -5s;
+  animation-duration: 18s, 8s;
+  animation-delay: -5s, -2s;
 }
 
 .blob-3 {
@@ -121,8 +121,8 @@ body {
   background: #3b82f6;
   bottom: -5%;
   left: 30%;
-  animation-duration: 24s;
-  animation-delay: -10s;
+  animation-duration: 24s, 7s;
+  animation-delay: -10s, -4s;
 }
 
 @keyframes blobFloat {
@@ -140,6 +140,15 @@ body {
   }
   100% {
     transform: translate(-10px, -20px) scale(1);
+  }
+}
+
+@keyframes blobPulse {
+  0%, 100% {
+    opacity: 0.12;
+  }
+  50% {
+    opacity: 0.22;
   }
 }
 

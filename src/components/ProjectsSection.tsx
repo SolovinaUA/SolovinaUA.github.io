@@ -20,7 +20,6 @@ const slideVariants = {
 export default function ProjectsSection() {
   const [current, setCurrent] = useState(0);
   const [direction, setDirection] = useState(0);
-  const [liked, setLiked] = useState<Record<string, boolean>>({});
   const sectionRef = useRef<HTMLElement>(null);
   const [visible, setVisible] = useState(false);
   const total = projects.length;
@@ -58,15 +57,11 @@ export default function ProjectsSection() {
     return () => window.removeEventListener("keydown", handler);
   }, [goPrev, goNext]);
 
-  const toggleLike = (id: string) =>
-    setLiked((p) => ({ ...p, [id]: !p[id] }));
-
   const getIndex = (offset: number) => (current + offset + total) % total;
 
   const slots = [-1, 0, 1] as const;
 
   const renderCard = (project: typeof projects[0], isActive: boolean, offset: number) => {
-    const isLiked = liked[project.id] || false;
     const idx = getIndex(offset);
 
     return (
@@ -198,31 +193,6 @@ export default function ProjectsSection() {
             }}>
               {project.official ? "ОФІЦІЙНИЙ ПЕРЕКЛАД" : project.statusLabel}
             </span>
-
-            <button
-              onClick={(e) => { e.stopPropagation(); toggleLike(project.id); }}
-              aria-label={`Підтримати ${project.name}`}
-              style={{
-                width: "40px",
-                height: "40px",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                borderRadius: "6px",
-                border: `1px solid ${isLiked ? project.color : "rgba(255,255,255,0.25)"}`,
-                background: isLiked ? `${project.color}30` : "rgba(0,0,0,0.3)",
-                cursor: "pointer",
-                padding: 0,
-                transition: "all 0.2s ease",
-              }}
-            >
-              <svg width="18" height="18" viewBox="0 0 24 24"
-                fill={isLiked ? project.color : "none"}
-                stroke={isLiked ? project.color : "rgba(255,255,255,0.7)"}
-                strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-              </svg>
-            </button>
 
             {project.downloadUrl && (
               <a

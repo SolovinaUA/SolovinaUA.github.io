@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import {
   Chart as ChartJS,
-  Tooltip,
   Legend,
   ArcElement,
 } from "chart.js";
@@ -14,7 +13,6 @@ import {
 } from "../data/persona5";
 
 ChartJS.register(
-  Tooltip,
   Legend,
   ArcElement
 );
@@ -75,10 +73,6 @@ function Persona5Block() {
 
   return (
     <div className="glass-card">
-      <h3 className="mb-6 text-lg font-bold">
-        Persona 5 Royal — прогрес локалізації
-      </h3>
-
       <div className="grid gap-6 sm:grid-cols-2">
         {/* Left: big percent + doughnut */}
         <div className="flex flex-col items-center justify-center gap-4">
@@ -90,15 +84,7 @@ function Persona5Block() {
                 maintainAspectRatio: false,
                 plugins: {
                   legend: { display: false },
-                  tooltip: {
-                    backgroundColor: "rgba(27,27,27,0.95)",
-                    titleColor: "#f0f0f0",
-                    bodyColor: "#a0a0a8",
-                    callbacks: {
-                      label: (ctx) =>
-                        `${ctx.label}: ${ctx.parsed.toLocaleString("uk-UA")}`,
-                    },
-                  },
+                  tooltip: { enabled: false },
                 },
               }}
             />
@@ -130,19 +116,32 @@ function Persona5Block() {
             </p>
           </div>
 
-          {/* Progress bar */}
+          {/* Progress bar with fading tail */}
           <div>
             <div className="mb-1 flex justify-between text-xs text-[--color-text-secondary]">
               <span>Прогрес</span>
               <span>{persona5OverallPercent}%</span>
             </div>
-            <div className="h-3 w-full overflow-hidden rounded-full bg-white/10">
+            <div className="relative h-3 w-full rounded-full bg-white/10">
+              {/* Main filled bar */}
               <motion.div
-                className="h-full rounded-full bg-gradient-to-r from-[#ef4444] to-[#f97316]"
+                className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-[#ef4444] to-[#f97316]"
                 initial={{ width: 0 }}
                 whileInView={{ width: `${persona5OverallPercent}%` }}
                 viewport={{ once: true }}
                 transition={{ duration: 1.2, ease: "easeOut", delay: 0.3 }}
+              />
+              {/* Fading tail — extends beyond the main bar */}
+              <motion.div
+                className="absolute inset-y-0 rounded-full"
+                style={{
+                  left: `${persona5OverallPercent}%`,
+                  background: "linear-gradient(to right, rgba(249,115,22,0.35), rgba(249,115,22,0))",
+                }}
+                initial={{ width: 0 }}
+                whileInView={{ width: "12%" }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8, ease: "easeOut", delay: 1.2 }}
               />
             </div>
           </div>
@@ -181,7 +180,7 @@ export default function StatsSection() {
         transition={{ duration: 0.6 }}
       >
         <h2 className="mb-2 text-center text-3xl font-extrabold sm:text-4xl">
-          Статистика української текстової локалізації Persona 5 Royal
+          Статистика перекладу Persona 5 Royal
         </h2>
 
         <div className="flex flex-col gap-6">
