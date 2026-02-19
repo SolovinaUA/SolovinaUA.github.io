@@ -54,18 +54,31 @@ const subtitleVariants = {
   },
 };
 
-const ctaVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { delay: 1.6, duration: 0.5, ease: "easeOut" },
-  },
-};
+const blueOutline = [
+  "-1.5px -1.5px 0 #0057B8",
+  "1.5px -1.5px 0 #0057B8",
+  "-1.5px 1.5px 0 #0057B8",
+  "1.5px 1.5px 0 #0057B8",
+  "0 -1.5px 0 #0057B8",
+  "0 1.5px 0 #0057B8",
+  "-1.5px 0 0 #0057B8",
+  "1.5px 0 0 #0057B8",
+  "0 0 30px rgba(0,87,184,0.25)",
+  "0 0 60px rgba(0,87,184,0.1)",
+].join(", ");
 
-const glowStyle = {
-  textShadow: "0 0 40px rgba(139,195,74,0.3), 0 0 80px rgba(139,195,74,0.15), 0 0 120px rgba(139,195,74,0.05)",
-};
+const yellowOutline = [
+  "-1.5px -1.5px 0 #FFD700",
+  "1.5px -1.5px 0 #FFD700",
+  "-1.5px 1.5px 0 #FFD700",
+  "1.5px 1.5px 0 #FFD700",
+  "0 -1.5px 0 #FFD700",
+  "0 1.5px 0 #FFD700",
+  "-1.5px 0 0 #FFD700",
+  "1.5px 0 0 #FFD700",
+  "0 0 30px rgba(255,215,0,0.25)",
+  "0 0 60px rgba(255,215,0,0.1)",
+].join(", ");
 
 export default function Hero() {
   return (
@@ -82,8 +95,8 @@ export default function Hero() {
         textAlign: "center",
       }}
     >
-      <div style={{ marginBottom: "1.5rem", ...glowStyle }}>
-        {/* Line 1: СОЛОВ'ЇНА */}
+      <div style={{ marginBottom: "1.5rem" }}>
+        {/* Line 1: СОЛОВ'ЇНА — blue outline */}
         <motion.div
           style={{
             display: "flex",
@@ -92,6 +105,7 @@ export default function Hero() {
             fontWeight: 900,
             letterSpacing: "0.06em",
             lineHeight: 1.1,
+            textShadow: blueOutline,
           }}
           variants={containerVariants}
           initial="hidden"
@@ -116,7 +130,7 @@ export default function Hero() {
           ))}
         </motion.div>
 
-        {/* Line 2: КОМАНДА */}
+        {/* Line 2: КОМАНДА — yellow outline */}
         <motion.div
           style={{
             display: "flex",
@@ -125,6 +139,7 @@ export default function Hero() {
             fontWeight: 900,
             letterSpacing: "0.06em",
             lineHeight: 1.1,
+            textShadow: yellowOutline,
           }}
           variants={line2Variants}
           initial="hidden"
@@ -151,7 +166,7 @@ export default function Hero() {
       </div>
 
       <motion.p
-        style={{ marginBottom: "2.5rem", fontSize: "clamp(1rem, 2.5vw, 1.5rem)", color: "#a0a0a8" }}
+        style={{ marginBottom: "25px", fontSize: "clamp(1rem, 2.5vw, 1.5rem)", color: "#a0a0a8" }}
         variants={subtitleVariants}
         initial="hidden"
         animate="visible"
@@ -163,10 +178,6 @@ export default function Hero() {
       <motion.a
         href="#projects"
         style={{
-          position: "absolute",
-          bottom: "2rem",
-          left: "50%",
-          transform: "translateX(-50%)",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",

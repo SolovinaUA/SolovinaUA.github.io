@@ -4,7 +4,7 @@ import { projects } from "../data/projects";
 
 const slideVariants = {
   enter: (dir: number) => ({
-    x: dir > 0 ? "60%" : "-60%",
+    x: dir > 0 ? "80%" : "-80%",
     opacity: 0,
   }),
   center: {
@@ -12,7 +12,7 @@ const slideVariants = {
     opacity: 1,
   },
   exit: (dir: number) => ({
-    x: dir > 0 ? "-60%" : "60%",
+    x: dir > 0 ? "-80%" : "80%",
     opacity: 0,
   }),
 };
@@ -20,6 +20,7 @@ const slideVariants = {
 export default function ProjectsSection() {
   const [current, setCurrent] = useState(0);
   const [direction, setDirection] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
   const [visible, setVisible] = useState(false);
   const total = projects.length;
@@ -40,6 +41,13 @@ export default function ProjectsSection() {
   }, [current]);
 
   useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 640);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
+
+  useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => { if (entry.isIntersecting) setVisible(true); },
       { threshold: 0.1 }
@@ -57,16 +65,29 @@ export default function ProjectsSection() {
     return () => window.removeEventListener("keydown", handler);
   }, [goPrev, goNext]);
 
+  // Touch swipe support
+  const touchStartX = useRef(0);
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    const diff = touchStartX.current - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 50) {
+      if (diff > 0) goNext();
+      else goPrev();
+    }
+  };
+
   const getIndex = (offset: number) => (current + offset + total) % total;
-
   const slots = [-1, 0, 1] as const;
+  const project = projects[current];
 
-  const renderCard = (project: typeof projects[0], isActive: boolean, offset: number) => {
+  const renderCard = (proj: typeof projects[0], isActive: boolean, offset: number) => {
     const idx = getIndex(offset);
 
     return (
       <motion.div
-        key={project.id}
+        key={proj.id}
         custom={direction}
         variants={slideVariants}
         initial="enter"
@@ -74,8 +95,8 @@ export default function ProjectsSection() {
         exit="exit"
         transition={{ duration: 0.45, ease: [0.4, 0, 0.2, 1] }}
         style={{
-          flex: "0 0 57%",
-          height: "460px",
+          flex: isMobile ? "0 0 100%" : "0 0 57%",
+          height: isMobile ? "340px" : "460px",
           borderRadius: "12px",
           overflow: "hidden",
           position: "relative",
@@ -87,12 +108,12 @@ export default function ProjectsSection() {
         <div style={{
           position: "absolute",
           inset: 0,
-          background: project.image
-            ? `url(${project.image}) center/cover no-repeat`
-            : project.gradient,
+          background: proj.image
+            ? `url(${proj.image}) center/cover no-repeat`
+            : proj.gradient,
         }} />
 
-        {/* Inactive overlay — semi-transparent #858082 */}
+        {/* Inactive overlay */}
         {!isActive && (
           <div style={{
             position: "absolute",
@@ -104,7 +125,7 @@ export default function ProjectsSection() {
         )}
 
         {/* Watermark title (only for cards without image) */}
-        {!project.image && (
+        {!proj.image && (
           <div style={{
             position: "absolute",
             inset: 0,
@@ -114,7 +135,7 @@ export default function ProjectsSection() {
             padding: "2rem",
           }}>
             <span style={{
-              fontSize: "clamp(2.5rem, 5vw, 4.5rem)",
+              fontSize: "clamp(2rem, 5vw, 4.5rem)",
               fontWeight: 900,
               color: "rgba(255,255,255,0.07)",
               textTransform: "uppercase",
@@ -123,7 +144,7 @@ export default function ProjectsSection() {
               textAlign: "center",
               userSelect: "none",
             }}>
-              {project.name}
+              {proj.name}
             </span>
           </div>
         )}
@@ -134,7 +155,7 @@ export default function ProjectsSection() {
           bottom: 0,
           left: 0,
           right: 0,
-          height: "55%",
+          height: "60%",
           background: "linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 100%)",
         }} />
 
@@ -144,95 +165,92 @@ export default function ProjectsSection() {
           bottom: 0,
           left: 0,
           right: 0,
-          padding: "20px 24px",
-          display: "flex",
-          alignItems: "flex-end",
-          justifyContent: "space-between",
-          gap: "16px",
+          padding: isMobile ? "16px" : "20px 24px",
         }}>
-          {/* Left: status + title */}
-          <div style={{ flex: 1, minWidth: 0 }}>
-            <div style={{
-              fontSize: "0.7rem",
-              fontWeight: 600,
-              color: project.official ? "#22c55e" : project.color,
-              marginBottom: "6px",
-              textTransform: "uppercase",
-              letterSpacing: "0.08em",
-            }}>
-              {project.official ? "Офіційний переклад" : project.statusLabel}
-            </div>
-            <h3 style={{
-              fontSize: "clamp(1.1rem, 2.5vw, 1.6rem)",
-              fontWeight: 700,
-              color: "#fff",
-              margin: 0,
-              lineHeight: 1.2,
-            }}>
-              {project.name}
-            </h3>
-          </div>
-
-          {/* Right: badge + heart + download (only active) */}
+          {/* Status label */}
           <div style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "8px",
-            flexShrink: 0,
-            opacity: isActive ? 1 : 0,
-            transition: "opacity 0.4s ease",
-            pointerEvents: isActive ? "auto" : "none",
+            fontSize: "0.65rem",
+            fontWeight: 600,
+            color: proj.official ? "#22c55e" : proj.color,
+            marginBottom: "4px",
+            textTransform: "uppercase",
+            letterSpacing: "0.08em",
           }}>
-            <span style={{
-              padding: "5px 12px",
-              borderRadius: "4px",
-              fontSize: "0.75rem",
-              fontWeight: 700,
-              background: project.official ? "#22c55e" : project.color,
-              color: "#fff",
-            }}>
-              {project.official ? "ОФІЦІЙНИЙ ПЕРЕКЛАД" : project.statusLabel}
-            </span>
-
-            {project.downloadUrl && (
-              <a
-                href={project.downloadDisabled ? undefined : project.downloadUrl}
-                target={project.downloadDisabled ? undefined : "_blank"}
-                rel={project.downloadDisabled ? undefined : "noopener noreferrer"}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  if (project.downloadDisabled) e.preventDefault();
-                }}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "6px",
-                  height: "40px",
-                  padding: "0 18px",
-                  background: project.downloadDisabled ? "rgba(255,255,255,0.08)" : "#8bc34a",
-                  color: project.downloadDisabled ? "rgba(255,255,255,0.3)" : "#1b1b1b",
-                  borderRadius: "6px",
-                  fontSize: "0.9rem",
-                  fontWeight: 700,
-                  textDecoration: "none",
-                  border: project.downloadDisabled ? "1px solid rgba(255,255,255,0.1)" : "none",
-                  cursor: project.downloadDisabled ? "not-allowed" : "pointer",
-                  transition: "all 0.2s ease",
-                  whiteSpace: "nowrap",
-                  opacity: project.downloadDisabled ? 0.6 : 1,
-                }}
-                onMouseEnter={(e) => { if (!project.downloadDisabled) e.currentTarget.style.background = "#9ccc65"; }}
-                onMouseLeave={(e) => { if (!project.downloadDisabled) e.currentTarget.style.background = "#8bc34a"; }}
-              >
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                  <polyline points="7 10 12 15 17 10" />
-                  <line x1="12" y1="15" x2="12" y2="3" />
-                </svg>
-                {project.downloadLabel || "Завантажити"}
-              </a>
-            )}
+            {proj.official ? "Офіційний переклад" : proj.statusLabel}
           </div>
+          {/* Title */}
+          <h3 style={{
+            fontSize: isMobile ? "1.1rem" : "clamp(1.1rem, 2.5vw, 1.6rem)",
+            fontWeight: 700,
+            color: "#fff",
+            margin: 0,
+            lineHeight: 1.2,
+            marginBottom: isActive ? "12px" : 0,
+          }}>
+            {proj.name}
+          </h3>
+
+          {/* Actions row — only for active card */}
+          {isActive && (
+            <div style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+              flexWrap: "wrap",
+              opacity: isActive ? 1 : 0,
+              transition: "opacity 0.4s ease",
+            }}>
+              <span style={{
+                padding: "4px 10px",
+                borderRadius: "4px",
+                fontSize: "0.7rem",
+                fontWeight: 700,
+                background: proj.official ? "#22c55e" : proj.color,
+                color: "#fff",
+              }}>
+                {proj.official ? "ОФІЦІЙНИЙ ПЕРЕКЛАД" : proj.statusLabel}
+              </span>
+
+              {proj.downloadUrl && (
+                <a
+                  href={proj.downloadDisabled ? undefined : proj.downloadUrl}
+                  target={proj.downloadDisabled ? undefined : "_blank"}
+                  rel={proj.downloadDisabled ? undefined : "noopener noreferrer"}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (proj.downloadDisabled) e.preventDefault();
+                  }}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "5px",
+                    height: "32px",
+                    padding: "0 14px",
+                    background: proj.downloadDisabled ? "rgba(255,255,255,0.08)" : "#8bc34a",
+                    color: proj.downloadDisabled ? "rgba(255,255,255,0.3)" : "#1b1b1b",
+                    borderRadius: "6px",
+                    fontSize: "0.8rem",
+                    fontWeight: 700,
+                    textDecoration: "none",
+                    border: proj.downloadDisabled ? "1px solid rgba(255,255,255,0.1)" : "none",
+                    cursor: proj.downloadDisabled ? "not-allowed" : "pointer",
+                    transition: "all 0.2s ease",
+                    whiteSpace: "nowrap",
+                    opacity: proj.downloadDisabled ? 0.6 : 1,
+                  }}
+                  onMouseEnter={(e) => { if (!proj.downloadDisabled) e.currentTarget.style.background = "#9ccc65"; }}
+                  onMouseLeave={(e) => { if (!proj.downloadDisabled) e.currentTarget.style.background = "#8bc34a"; }}
+                >
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                    <polyline points="7 10 12 15 17 10" />
+                    <line x1="12" y1="15" x2="12" y2="3" />
+                  </svg>
+                  {proj.downloadLabel || "Завантажити"}
+                </a>
+              )}
+            </div>
+          )}
         </div>
       </motion.div>
     );
@@ -242,7 +260,7 @@ export default function ProjectsSection() {
     <section
       ref={sectionRef}
       id="projects"
-      style={{ padding: "80px 0", overflow: "hidden" }}
+      style={{ padding: isMobile ? "48px 0" : "80px 0", overflow: "hidden" }}
     >
       <motion.div
         initial={{ opacity: 0, y: 30 }}
@@ -251,40 +269,46 @@ export default function ProjectsSection() {
       >
         <h2 style={{
           textAlign: "center",
-          fontSize: "clamp(1.8rem, 4vw, 2.5rem)",
+          fontSize: "clamp(1.5rem, 4vw, 2.5rem)",
           fontWeight: 800,
           color: "#f0f0f0",
           marginBottom: "8px",
+          padding: "0 16px",
         }}>
           Ігри, над якими ми працюємо
         </h2>
         <p style={{
           textAlign: "center",
           color: "#a0a0a8",
-          marginBottom: "48px",
+          marginBottom: isMobile ? "28px" : "48px",
           fontSize: "1rem",
+          padding: "0 16px",
         }}>
           Українська локалізація для найкращих ігор
         </p>
 
         {/* === Carousel === */}
-        <div style={{
-          position: "relative",
-          maxWidth: "100%",
-          margin: "0 auto",
-        }}>
+        <div
+          style={{
+            position: "relative",
+            maxWidth: "100%",
+            margin: "0 auto",
+          }}
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
+        >
           {/* Arrow left */}
           <button
             onClick={goPrev}
             aria-label="Попередня гра"
             style={{
               position: "absolute",
-              left: "calc(21.5% - 8px)",
+              left: isMobile ? "8px" : "calc(21.5% - 8px)",
               top: "50%",
               transform: "translate(-50%, -50%)",
               zIndex: 10,
-              width: "44px",
-              height: "44px",
+              width: isMobile ? "36px" : "44px",
+              height: isMobile ? "36px" : "44px",
               borderRadius: "50%",
               border: "1px solid rgba(255,255,255,0.25)",
               background: "rgba(0,0,0,0.7)",
@@ -310,12 +334,12 @@ export default function ProjectsSection() {
             aria-label="Наступна гра"
             style={{
               position: "absolute",
-              right: "calc(21.5% - 8px)",
+              right: isMobile ? "8px" : "calc(21.5% - 8px)",
               top: "50%",
               transform: "translate(50%, -50%)",
               zIndex: 10,
-              width: "44px",
-              height: "44px",
+              width: isMobile ? "36px" : "44px",
+              height: isMobile ? "36px" : "44px",
               borderRadius: "50%",
               border: "1px solid rgba(255,255,255,0.25)",
               background: "rgba(0,0,0,0.7)",
@@ -338,26 +362,33 @@ export default function ProjectsSection() {
           {/* Overflow clip wrapper */}
           <div style={{
             overflow: "hidden",
-            borderRadius: "12px",
+            borderRadius: isMobile ? "0" : "12px",
+            padding: isMobile ? "0 16px" : 0,
           }}>
-            {/* 3-card track — shifted left so center card is centered */}
-            <div style={{
-              display: "flex",
-              gap: "16px",
-              transform: "translateX(calc(-35.5% - 16px))",
-            }}>
-              {slots.map((offset) => {
-                const idx = getIndex(offset);
-                const project = projects[idx];
-                const isActive = offset === 0;
-
-                return (
-                  <AnimatePresence mode="popLayout" custom={direction} key={`slot-${offset}`}>
-                    {renderCard(project, isActive, offset)}
-                  </AnimatePresence>
-                );
-              })}
-            </div>
+            {isMobile ? (
+              /* Mobile: single card */
+              <AnimatePresence mode="popLayout" custom={direction}>
+                {renderCard(project, true, 0)}
+              </AnimatePresence>
+            ) : (
+              /* Desktop: 3-card track */
+              <div style={{
+                display: "flex",
+                gap: "16px",
+                transform: "translateX(calc(-35.5% - 16px))",
+              }}>
+                {slots.map((offset) => {
+                  const idx = getIndex(offset);
+                  const proj = projects[idx];
+                  const isActive = offset === 0;
+                  return (
+                    <AnimatePresence mode="popLayout" custom={direction} key={`slot-${offset}`}>
+                      {renderCard(proj, isActive, offset)}
+                    </AnimatePresence>
+                  );
+                })}
+              </div>
+            )}
           </div>
 
           {/* Dot indicators */}
@@ -365,7 +396,7 @@ export default function ProjectsSection() {
             display: "flex",
             justifyContent: "center",
             gap: "8px",
-            marginTop: "20px",
+            marginTop: "16px",
           }}>
             {projects.map((p, i) => (
               <button

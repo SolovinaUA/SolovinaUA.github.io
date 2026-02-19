@@ -1,0 +1,17 @@
+<svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="630" fill="#0e0e10"/>
+  <!-- Subtle gradient blobs -->
+  <circle cx="200" cy="150" r="250" fill="#6d5dfc" opacity="0.12" filter="url(#blur)"/>
+  <circle cx="900" cy="400" r="200" fill="#ef4444" opacity="0.12" filter="url(#blur)"/>
+  <circle cx="600" cy="600" r="180" fill="#3b82f6" opacity="0.1" filter="url(#blur)"/>
+  <defs>
+    <filter id="blur"><feGaussianBlur stdDeviation="60"/></filter>
+  </defs>
+  <!-- Title -->
+  <text x="600" y="260" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="72" font-weight="900" letter-spacing="6" fill="#ffffff">СОЛОВ'ЇНА</text>
+  <text x="600" y="345" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="72" font-weight="900" letter-spacing="6" fill="#ffffff">КОМАНДА</text>
+  <!-- Subtitle -->
+  <text x="600" y="410" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="500" fill="#a0a0a8">Українська локалізація ігор</text>
+  <!-- URL -->
+  <text x="600" y="560" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="600" fill="#8bc34a" letter-spacing="1">solovinaua.github.io</text>
+</svg>
