@@ -7,6 +7,8 @@ export interface Project {
   color: string;
   gradient: string;
   image?: string;
+  downloadUrl?: string;
+  downloadLabel?: string;
 }
 
 // TODO: замінити дані на реальні
@@ -20,6 +22,8 @@ export const projects: Project[] = [
     color: "#ef4444",
     gradient: "linear-gradient(135deg, #1a1a2e 0%, #16213e 30%, #e94560 100%)",
     image: "https://cdn2.steamgriddb.com/hero/f87ab3858eb99f1af77cfc900cd91199.jpg",
+    downloadUrl: "https://lbklauncher.com/games/persona_5_royal/solovina-komanda",
+    downloadLabel: "Завантажити",
   },
   {
     id: "dave-the-diver",
@@ -50,6 +54,8 @@ export const projects: Project[] = [
     color: "#22c55e",
     gradient: "linear-gradient(135deg, #0a1f0a 0%, #1a3d2a 40%, #22c55e 100%)",
     image: "https://shared.steamstatic.com/store_item_assets/steam/apps/1072300/library_hero_2x.jpg",
+    downloadUrl: "https://store.steampowered.com/app/1072300/Echo_Generation_Midnight_Edition/?l=ukrainian",
+    downloadLabel: "Придбати",
   },
   {
     id: "ravenlok",
@@ -60,5 +66,7 @@ export const projects: Project[] = [
     color: "#eab308",
     gradient: "linear-gradient(135deg, #1a1500 0%, #3d2e06 40%, #eab308 100%)",
     image: "https://shared.steamstatic.com/store_item_assets/steam/apps/1072290/042f7f1eed524de381b28473cdf2fc1ea77a77f6/library_hero_2x.jpg",
+    downloadUrl: "https://store.steampowered.com/app/1072290/Ravenlok_Legendary_Edition/",
+    downloadLabel: "Придбати",
   },
 ];

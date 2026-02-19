@@ -165,7 +165,7 @@ export default function ProjectsSection() {
               textTransform: "uppercase",
               letterSpacing: "0.08em",
             }}>
-              {project.official ? "Official" : project.statusLabel}
+              {project.official ? "Офіційний переклад" : project.statusLabel}
             </div>
             <h3 style={{
               fontSize: "clamp(1.1rem, 2.5vw, 1.6rem)",
@@ -196,7 +196,7 @@ export default function ProjectsSection() {
               background: project.official ? "#22c55e" : project.color,
               color: "#fff",
             }}>
-              {project.official ? "OFFICIAL" : project.statusLabel}
+              {project.official ? "ОФІЦІЙНИЙ ПЕРЕКЛАД" : project.statusLabel}
             </span>
 
             <button
@@ -224,38 +224,40 @@ export default function ProjectsSection() {
               </svg>
             </button>
 
-            <a
-              href="https://lbklauncher.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={(e) => e.stopPropagation()}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "6px",
-                height: "40px",
-                padding: "0 18px",
-                background: "#8bc34a",
-                color: "#1b1b1b",
-                borderRadius: "6px",
-                fontSize: "0.9rem",
-                fontWeight: 700,
-                textDecoration: "none",
-                border: "none",
-                cursor: "pointer",
-                transition: "all 0.2s ease",
-                whiteSpace: "nowrap",
-              }}
-              onMouseEnter={(e) => { e.currentTarget.style.background = "#9ccc65"; }}
-              onMouseLeave={(e) => { e.currentTarget.style.background = "#8bc34a"; }}
-            >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                <polyline points="7 10 12 15 17 10" />
-                <line x1="12" y1="15" x2="12" y2="3" />
-              </svg>
-              Завантажити
-            </a>
+            {project.downloadUrl && (
+              <a
+                href={project.downloadUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={(e) => e.stopPropagation()}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "6px",
+                  height: "40px",
+                  padding: "0 18px",
+                  background: "#8bc34a",
+                  color: "#1b1b1b",
+                  borderRadius: "6px",
+                  fontSize: "0.9rem",
+                  fontWeight: 700,
+                  textDecoration: "none",
+                  border: "none",
+                  cursor: "pointer",
+                  transition: "all 0.2s ease",
+                  whiteSpace: "nowrap",
+                }}
+                onMouseEnter={(e) => { e.currentTarget.style.background = "#9ccc65"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.background = "#8bc34a"; }}
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                  <polyline points="7 10 12 15 17 10" />
+                  <line x1="12" y1="15" x2="12" y2="3" />
+                </svg>
+                {project.downloadLabel || "Завантажити"}
+              </a>
+            )}
           </div>
         </div>
       </motion.div>
