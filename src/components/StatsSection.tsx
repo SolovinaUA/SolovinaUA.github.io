@@ -2,18 +2,11 @@ import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import {
   Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Filler,
   Tooltip,
   Legend,
   ArcElement,
 } from "chart.js";
-import { Line, Doughnut } from "react-chartjs-2";
-import { projects } from "../data/projects";
-import { progressData, dates } from "../data/progress";
+import { Doughnut } from "react-chartjs-2";
 import {
   persona5OverallPercent,
   uaLines,
@@ -21,174 +14,10 @@ import {
 } from "../data/persona5";
 
 ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Filler,
   Tooltip,
   Legend,
   ArcElement
 );
-
-/* ============ Chart config helpers ============ */
-
-const gridColor = "rgba(255,255,255,0.06)";
-const tickColor = "rgba(255,255,255,0.4)";
-
-const commonScales = {
-  x: {
-    grid: { color: gridColor },
-    ticks: { color: tickColor, font: { size: 11 } },
-    border: { color: "transparent" },
-  },
-  y: {
-    min: 0,
-    max: 100,
-    grid: { color: gridColor },
-    ticks: {
-      color: tickColor,
-      font: { size: 11 },
-      callback: (v: string | number) => `${v}%`,
-    },
-    border: { color: "transparent" },
-  },
-};
-
-const dateLabels = dates.map((d) => {
-  const [y, m] = d.split("-");
-  const months = [
-    "", "Січ", "Лют", "Бер", "Кві", "Тра", "Чер",
-    "Лип", "Сер", "Вер", "Жов", "Лис", "Гру",
-  ];
-  return `${months[parseInt(m)]} '${y.slice(2)}`;
-});
-
-function getProjectLineData(projectId: string) {
-  return dates.map((d) => {
-    const p = progressData.find(
-      (pt) => pt.date === d && pt.projectId === projectId
-    );
-    return p ? p.percent : null;
-  });
-}
-
-/* ============ Progress Over Time (Line) ============ */
-
-function ProgressChart() {
-  const data = {
-    labels: dateLabels,
-    datasets: projects.map((proj) => ({
-      label: proj.name,
-      data: getProjectLineData(proj.id),
-      borderColor: proj.color,
-      backgroundColor: proj.color + "20",
-      tension: 0.4,
-      pointRadius: 4,
-      pointHoverRadius: 6,
-      borderWidth: 2,
-    })),
-  };
-
-  return (
-    <div className="glass-card">
-      <h3 className="mb-4 text-lg font-bold">Прогрес у часі</h3>
-      <div className="relative h-72 w-full sm:h-80">
-        <Line
-          data={data}
-          options={{
-            responsive: true,
-            maintainAspectRatio: false,
-            interaction: { mode: "index", intersect: false },
-            plugins: {
-              legend: {
-                labels: {
-                  color: "rgba(255,255,255,0.7)",
-                  padding: 16,
-                  usePointStyle: true,
-                  pointStyleWidth: 8,
-                  font: { size: 12 },
-                },
-              },
-              tooltip: {
-                backgroundColor: "rgba(27,27,27,0.95)",
-                borderColor: "rgba(255,255,255,0.1)",
-                borderWidth: 1,
-                titleColor: "#f0f0f0",
-                bodyColor: "#a0a0a8",
-                padding: 12,
-                callbacks: {
-                  label: (ctx) => `${ctx.dataset.label}: ${ctx.parsed.y}%`,
-                },
-              },
-            },
-            scales: commonScales,
-          }}
-        />
-      </div>
-    </div>
-  );
-}
-
-/* ============ Top-5 Dynamics (Area) ============ */
-
-function DynamicsChart() {
-  const data = {
-    labels: dateLabels,
-    datasets: projects.map((proj) => ({
-      label: proj.name,
-      data: getProjectLineData(proj.id),
-      borderColor: proj.color,
-      backgroundColor: proj.color + "15",
-      fill: true,
-      tension: 0.4,
-      pointRadius: 3,
-      pointHoverRadius: 5,
-      borderWidth: 2,
-    })),
-  };
-
-  return (
-    <div className="glass-card">
-      <h3 className="mb-4 text-lg font-bold">
-        Динаміка розвитку топ-5 активних проєктів
-      </h3>
-      <div className="relative h-72 w-full sm:h-80">
-        <Line
-          data={data}
-          options={{
-            responsive: true,
-            maintainAspectRatio: false,
-            interaction: { mode: "index", intersect: false },
-            plugins: {
-              legend: {
-                labels: {
-                  color: "rgba(255,255,255,0.7)",
-                  padding: 16,
-                  usePointStyle: true,
-                  pointStyleWidth: 8,
-                  font: { size: 12 },
-                },
-              },
-              tooltip: {
-                backgroundColor: "rgba(27,27,27,0.95)",
-                borderColor: "rgba(255,255,255,0.1)",
-                borderWidth: 1,
-                titleColor: "#f0f0f0",
-                bodyColor: "#a0a0a8",
-                padding: 12,
-                callbacks: {
-                  label: (ctx) => `${ctx.dataset.label}: ${ctx.parsed.y}%`,
-                },
-              },
-            },
-            scales: commonScales,
-          }}
-        />
-      </div>
-    </div>
-  );
-}
 
 /* ============ Persona 5 Royal Block ============ */
 
@@ -359,8 +188,6 @@ export default function StatsSection() {
         </p>
 
         <div className="flex flex-col gap-6">
-          <ProgressChart />
-          <DynamicsChart />
           <Persona5Block />
         </div>
       </motion.div>
