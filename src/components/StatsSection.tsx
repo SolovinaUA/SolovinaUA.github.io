@@ -181,11 +181,8 @@ export default function StatsSection() {
         transition={{ duration: 0.6 }}
       >
         <h2 className="mb-2 text-center text-3xl font-extrabold sm:text-4xl">
-          Статистика
+          Статистика української текстової локалізації Persona 5 Royal
         </h2>
-        <p className="mb-10 text-center text-[--color-text-secondary]">
-          Наш прогрес у цифрах та графіках
-        </p>
 
         <div className="flex flex-col gap-6">
           <Persona5Block />
