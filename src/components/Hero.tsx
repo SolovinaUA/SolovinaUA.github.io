@@ -54,31 +54,8 @@ const subtitleVariants = {
   },
 };
 
-const blueOutline = [
-  "-1.5px -1.5px 0 #0057B8",
-  "1.5px -1.5px 0 #0057B8",
-  "-1.5px 1.5px 0 #0057B8",
-  "1.5px 1.5px 0 #0057B8",
-  "0 -1.5px 0 #0057B8",
-  "0 1.5px 0 #0057B8",
-  "-1.5px 0 0 #0057B8",
-  "1.5px 0 0 #0057B8",
-  "0 0 30px rgba(0,87,184,0.25)",
-  "0 0 60px rgba(0,87,184,0.1)",
-].join(", ");
-
-const yellowOutline = [
-  "-1.5px -1.5px 0 #FFD700",
-  "1.5px -1.5px 0 #FFD700",
-  "-1.5px 1.5px 0 #FFD700",
-  "1.5px 1.5px 0 #FFD700",
-  "0 -1.5px 0 #FFD700",
-  "0 1.5px 0 #FFD700",
-  "-1.5px 0 0 #FFD700",
-  "1.5px 0 0 #FFD700",
-  "0 0 30px rgba(255,215,0,0.25)",
-  "0 0 60px rgba(255,215,0,0.1)",
-].join(", ");
+const blueGlow = "drop-shadow(0 0 8px rgba(0,87,184,0.6)) drop-shadow(0 0 25px rgba(0,87,184,0.4)) drop-shadow(0 0 50px rgba(0,87,184,0.2))";
+const yellowGlow = "drop-shadow(0 0 8px rgba(255,215,0,0.6)) drop-shadow(0 0 25px rgba(255,215,0,0.4)) drop-shadow(0 0 50px rgba(255,215,0,0.2))";
 
 export default function Hero() {
   return (
@@ -105,7 +82,7 @@ export default function Hero() {
             fontWeight: 900,
             letterSpacing: "0.06em",
             lineHeight: 1.1,
-            textShadow: blueOutline,
+            filter: blueGlow,
           }}
           variants={containerVariants}
           initial="hidden"
@@ -139,7 +116,7 @@ export default function Hero() {
             fontWeight: 900,
             letterSpacing: "0.06em",
             lineHeight: 1.1,
-            textShadow: yellowOutline,
+            filter: yellowGlow,
           }}
           variants={line2Variants}
           initial="hidden"
@@ -166,7 +143,7 @@ export default function Hero() {
       </div>
 
       <motion.p
-        style={{ marginBottom: "25px", fontSize: "clamp(1rem, 2.5vw, 1.5rem)", color: "#a0a0a8" }}
+        style={{ marginBottom: 0, fontSize: "clamp(1rem, 2.5vw, 1.5rem)", color: "#a0a0a8" }}
         variants={subtitleVariants}
         initial="hidden"
         animate="visible"
@@ -178,6 +155,7 @@ export default function Hero() {
       <motion.a
         href="#projects"
         style={{
+          marginTop: "25px",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
