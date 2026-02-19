@@ -9,8 +9,8 @@ const containerVariants = {
   hidden: {},
   visible: {
     transition: {
-      staggerChildren: 0.05,
-      delayChildren: 0.3,
+      staggerChildren: 0.03,
+      delayChildren: 0.1,
     },
   },
 };
@@ -18,9 +18,9 @@ const containerVariants = {
 const letterVariants = {
   hidden: {
     opacity: 0,
-    y: 40,
-    filter: "blur(12px)",
-    scale: 0.5,
+    y: 20,
+    filter: "blur(8px)",
+    scale: 0.8,
   },
   visible: {
     opacity: 1,
@@ -29,8 +29,8 @@ const letterVariants = {
     scale: 1,
     transition: {
       type: "spring",
-      damping: 15,
-      stiffness: 150,
+      damping: 20,
+      stiffness: 300,
     },
   },
 };
@@ -39,18 +39,18 @@ const line2Variants = {
   hidden: {},
   visible: {
     transition: {
-      staggerChildren: 0.05,
-      delayChildren: 0.3 + letters1.length * 0.05,
+      staggerChildren: 0.03,
+      delayChildren: 0.1 + letters1.length * 0.03,
     },
   },
 };
 
 const subtitleVariants = {
-  hidden: { opacity: 0, y: 20 },
+  hidden: { opacity: 0, y: 15 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { delay: 1.2, duration: 0.6, ease: "easeOut" },
+    transition: { delay: 0.6, duration: 0.4, ease: "easeOut" },
   },
 };
 
