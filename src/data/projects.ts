@@ -41,7 +41,7 @@ export const projects: Project[] = [
   },
   {
     id: "kingdom-hearts-3",
-    name: "KINGDOM HEARTS III + Re Mind (DLC)",
+    name: "KINGDOM HEARTS III +\nRe Mind (DLC)",
     status: "in-progress",
     statusLabel: "У процесі",
     official: false,

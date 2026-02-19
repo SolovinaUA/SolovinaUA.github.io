@@ -676,9 +676,7 @@ export default function ProjectsSection() {
                       fontSize: "0.78rem",
                       fontWeight: 600,
                       color: isSelected ? "#f0f0f0" : "rgba(255,255,255,0.7)",
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                      whiteSpace: "nowrap",
+                      whiteSpace: "pre-line",
                       width: "100%",
                       lineHeight: 1.3,
                     }}>
