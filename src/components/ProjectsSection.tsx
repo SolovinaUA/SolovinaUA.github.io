@@ -465,7 +465,7 @@ export default function ProjectsSection() {
                     top: 0,
                     bottom: 0,
                     width: `${progress * 100}%`,
-                    background: p.color,
+                    background: "#ef4444",
                     borderRadius: "2px",
                   }} />
                 )}
@@ -473,7 +473,7 @@ export default function ProjectsSection() {
                   <div style={{
                     position: "absolute",
                     inset: 0,
-                    background: p.color,
+                    background: "#ef4444",
                     opacity: 0.4,
                     borderRadius: "2px",
                   }} />
